@@ -9,8 +9,8 @@ from starlette.responses import HTMLResponse
 from starlette.routing import Route
 
 
-async def homepage(request):
-    content = butter.html() > [
+def root(children: butter.Component = None) -> butter.Component:
+    return butter.html() > [
         butter.head()
         > [
             butter.link(rel="preconnect", href="https://fonts.gstatic.com"),
@@ -38,31 +38,37 @@ async def homepage(request):
             }
             """,
         ],
-        butter.body(style="background: #D36582; padding: 50px;")
+        butter.body(style="background: #D36582; padding: 50px;") > children,
+    ]
+
+
+async def homepage(request):
+    content = root() > [
+        butter.div()
         > [
-            butter.div()
+            logo(),
+            butter.h1(
+                style="font-family: inconsolata; color: #253C78; margin-top: 30px;"
+            )
+            > "find the latest version of your favourite software ✨",
+            butter.form()
             > [
-                logo(),
-                butter.h1(
-                    style="font-family: inconsolata; color: #253C78; margin-top: 30px;"
+                butter.span(
+                    contenteditable="",
+                    style=(
+                        "font-family: inconsolata; font-size: 40px; background: none; border: none; "
+                        "border-bottom: 4px solid currentColor; outline: none; color: #253C78; margin-top: 30px; "
+                        "width: 200px;"
+                    ),
                 )
-                > "find the latest version of your favourite software ✨",
-                butter.form()
-                > [
-                    butter.span(
-                        contenteditable="",
-                        style=(
-                            "font-family: inconsolata; font-size: 40px; background: none; border: none; "
-                            "border-bottom: 4px solid currentColor; outline: none; color: #253C78; margin-top: 30px; "
-                            "width: 200px;"
-                        ),
-                    )
-                    > "python",
-                    butter.button(style="border: none; background: none; font-size: 40px; cursor: pointer; margin-left: 20px;") > "👉",
-                ],
+                > "python",
+                butter.button(
+                    style="border: none; background: none; font-size: 40px; cursor: pointer; margin-left: 20px;"
+                )
+                > "👉",
             ],
-            cat(style="position: absolute; bottom: 0; right: 0;"),
         ],
+        cat(style="position: absolute; bottom: 0; right: 0;"),
     ]
 
     return HTMLResponse(render(content))
