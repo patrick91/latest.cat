@@ -57,10 +57,7 @@ async def fetch_latest(request):
         title()
         > [
             f"latest version for {slug} is ",
-            butter.span(
-                style="border-bottom: 4px solid currentColor;"
-            )
-            > "3.9.1",
+            butter.span(style="border-bottom: 4px solid currentColor;") > "3.9.1",
         ],
     ]
 
@@ -68,7 +65,7 @@ async def fetch_latest(request):
 
 
 async def search(request):
-    print(request.query_params["q"])
+    query = request.query_params["q"]  # noqa
 
     # TODO: find matching language
 
