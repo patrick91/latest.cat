@@ -32,7 +32,10 @@ class Component:
 
         return r
 
-def append_child(component: Component, value: Union[str, Component, List[Union[str, Component]]]):
+
+def append_child(
+    component: Component, value: Union[str, Component, List[Union[str, Component]]]
+):
     for child in component.children:
         if child.children is None:
             if type(value) == list:
@@ -46,7 +49,6 @@ def append_child(component: Component, value: Union[str, Component, List[Union[s
             component.children = value
         else:
             component.children.append(value)
-
 
 
 def _make_component(tag_name: str) -> Callable[[Dict[str, Any]], Component]:
@@ -63,6 +65,8 @@ body = _make_component("body")
 head = _make_component("head")
 style = _make_component("style")
 link = _make_component("link")
+script = _make_component("script")
+title = _make_component("title")
 h1 = _make_component("h1")
 h2 = _make_component("h2")
 h3 = _make_component("h3")
