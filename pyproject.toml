@@ -9,6 +9,8 @@ license = "MIT"
 python = "^3.9"
 starlette = "^0.14.1"
 uvicorn = {extras = ["standard"], version = "^0.13.3"}
+databases = "^0.4.1"
+aiosqlite = "^0.16.0"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^20.8b1", allow-prereleases = true}
