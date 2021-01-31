@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn-starlette:python3.7
+FROM tiangolo/uvicorn-gunicorn-starlette:python3.8
 
 # Install Poetry
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
