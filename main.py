@@ -7,7 +7,7 @@ from pages.search import search
 from pages.version import fetch_latest
 
 app = Starlette(
-    debug=True,
+    debug=False,
     routes=[
         Route("/", homepage),
         Route("/search", search),
