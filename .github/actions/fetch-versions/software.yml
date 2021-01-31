@@ -1,0 +1,34 @@
+- slug: go
+  name: Go
+  aliases: [golang]
+  source: github
+  repository: golang/go
+  version_naming: go
+
+- slug: swift
+  name: Swift
+  aliases: [apple]
+  source: github
+  repository: apple/swift
+  version_naming: swift
+
+- slug: python
+  name: Python
+  aliases: [py, 🐍, pitone]
+  source: github
+  repository: python/cpython
+  version_naming: python
+
+- slug: php
+  name: PHP
+  aliases: []
+  source: github
+  repository: php/php-src
+  version_naming: php
+
+- slug: rust
+  name: Rust
+  aliases: []
+  source: github
+  repository: rust-lang/rust
+  version_naming: basic
