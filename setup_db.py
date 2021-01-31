@@ -1,4 +1,5 @@
 import uuid
+import json
 from asyncio import run
 
 from data.config import database
@@ -11,7 +12,8 @@ async def setup_db():
           CREATE TABLE "Software" (
             "id" UUID NOT NULL PRIMARY KEY,
             "name" TEXT NOT NULL,
-            "slug" TEXT NOT NULL
+            "slug" TEXT NOT NULL,
+            "aliases" JSON
           );
         """
     )
@@ -20,7 +22,8 @@ async def setup_db():
           CREATE TABLE "Version" (
             "id" INTEGER PRIMARY KEY AUTOINCREMENT,
             "software" UUID NOT NULL REFERENCES "Software" ("id") ON DELETE CASCADE,
-            "version" TEXT NOT NULL
+            "version" TEXT NOT NULL,
+            "pre" BOOL
           );
         """
     )
@@ -30,15 +33,23 @@ async def setup_db():
 
     python_uuid = uuid.uuid4()
 
-    query = "INSERT INTO Software(id, name, slug) VALUES (:id, :name, :slug)"
-    values = {"name": "Python", "slug": "python", "id": str(python_uuid)}
+    query = """
+        INSERT INTO Software(id, name, slug, aliases)
+        VALUES (:id, :name, :slug, :aliases)
+    """
+    values = {
+        "name": "Python",
+        "slug": "python",
+        "aliases": json.dumps(["py", "🐍"]),
+        "id": str(python_uuid),
+    }
 
     await database.execute(query=query, values=values)
 
     query = (
-        "INSERT INTO Version(software, version) VALUES (:software, :version)"
+        "INSERT INTO Version(software, version, pre) VALUES (:software, :version, :pre)"
     )
-    values = {"version": "3.9.1", "software": str(python_uuid)}
+    values = {"version": "3.9.1", "pre": False, "software": str(python_uuid)}
 
     await database.execute(query=query, values=values)
 
