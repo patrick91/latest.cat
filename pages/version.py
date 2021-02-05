@@ -1,10 +1,11 @@
+from starlette.responses import HTMLResponse, PlainTextResponse, RedirectResponse
+
 import butter
 from butter.render import render
 from components.layout import root
 from components.logo import logo
 from components.title import title
 from data.config import database
-from starlette.responses import HTMLResponse, PlainTextResponse
 
 
 async def fetch_latest(request):
@@ -23,6 +24,9 @@ async def fetch_latest(request):
         values["version"] = f"{version}%"
 
     result = await database.fetch_one(query, values)
+
+    if result is None:
+        return RedirectResponse("/404")
 
     if "curl/" in request.headers.get("user-agent"):
         return PlainTextResponse(result[0])

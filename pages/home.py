@@ -1,10 +1,11 @@
+from starlette.responses import HTMLResponse
+
 import butter
 from butter.render import render
 from components.cat import cat
 from components.layout import root
 from components.logo import logo
 from components.title import title
-from starlette.responses import HTMLResponse
 
 
 async def homepage(request):
@@ -34,7 +35,7 @@ async def homepage(request):
         ],
         cat(style="position: absolute; bottom: 0; right: 0;"),
         butter.script()
-        > """
+        > r"""
             const input = document.querySelector('#search-input');
             const clone = document.createElement('pre');
             clone.style.position = 'absolute';

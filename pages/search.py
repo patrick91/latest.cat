@@ -1,4 +1,5 @@
 from starlette.responses import RedirectResponse
+
 from data.config import database
 
 

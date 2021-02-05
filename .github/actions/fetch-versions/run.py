@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-import yaml
-import re
-import uuid
 import json
 import logging
-
-from github import Github
-from typing import Iterator, Optional, List, Tuple
-from dataclasses import dataclass
-from databases import Database
+import re
+import uuid
 from asyncio import run
+from dataclasses import dataclass
+from typing import Iterator, List, Optional, Tuple
 
+import yaml
+from databases import Database
+from github import Github
 
 logging.basicConfig(level=logging.INFO)
 

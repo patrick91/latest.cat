@@ -1,6 +1,6 @@
-from databases import Database
-
 from pathlib import Path
+
+from databases import Database
 
 database_path = Path(".").parent / "db.sqlite"
 
