@@ -1,4 +1,4 @@
-from starlette.responses import HTMLResponse, PlainTextResponse, RedirectResponse
+from starlette.responses import HTMLResponse, PlainTextResponse
 
 import butter
 from butter.render import render
@@ -6,6 +6,8 @@ from components.layout import root
 from components.logo import logo
 from components.title import title
 from data.config import database
+
+from .four_oh_four import four_oh_four
 
 
 async def fetch_latest(request):
@@ -26,7 +28,7 @@ async def fetch_latest(request):
     result = await database.fetch_one(query, values)
 
     if result is None:
-        return RedirectResponse("/404")
+        return await four_oh_four(request)
 
     if "curl/" in request.headers.get("user-agent"):
         return PlainTextResponse(result[0])
