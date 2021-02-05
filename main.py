@@ -12,6 +12,7 @@ app = Starlette(
         Route("/", homepage),
         Route("/search", search),
         Route("/{slug}", fetch_latest),
+        Route("/{slug}/{version}", fetch_latest),
     ],
     on_startup=[database.connect],
     on_shutdown=[database.disconnect],
