@@ -32,3 +32,10 @@
   source: github
   repository: rust-lang/rust
   version_naming: basic
+
+- slug: strawberry
+  name: Strawberry
+  aliases: [strawberry-graphql]
+  source: github
+  repository: strawberry-graphql/strawberry
+  version_naming: basic

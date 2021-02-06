@@ -11,19 +11,14 @@ from typing import Iterator, List, Optional, Tuple
 import yaml
 from databases import Database
 from github import Github
+from data.utils import Version
 
 logging.basicConfig(level=logging.INFO)
 
-github = Github("TOKEN", per_page=100)
+github = Github("38fc66afc7ce30d9fcd0559c9aaf9b5b924b2464", per_page=100)
 
-database_path = "../../../db.sqlite"
+database_path = "db.sqlite"
 database = Database(f"sqlite:///{database_path}")
-
-
-@dataclass
-class Version:
-    version: str
-    pre: Optional[bool]
 
 
 @dataclass
@@ -37,49 +32,26 @@ class Software:
 
     _namings = {
         # https://github.com/rust-lang/rust/tags
-        "basic": re.compile(r"^(\d+\.\d+(?:\.\d+)?)$"),
+        "basic": re.compile(r"^(\d+)\.(\d+)(?:\.(\d+))?$"),
         # https://github.com/python/cpython/tags
-        "python": re.compile(r"^v?(\d+\.\d+(?:\.\d+)?)$"),
-        # "python_pre": re.compile(r"^v?(\d+\.\d+(?:\.\w+)?)$"),
+        "python": re.compile(r"^v?(\d+)\.(\d+)(?:\.(\d+))?$"),
         # https://github.com/php/php-src/tags
-        "php": re.compile(r"^php-?(\d+\.\d+(?:\.\d+)?)$"),
-        # "php_pre": re.compile(r"^php-?(\d+\.\d+(?:\.\w+)?)$"),
+        "php": re.compile(r"^php-?(\d+)\.(\d+)(?:\.(\d+))?$"),
         # https://github.com/apple/swift/tags
-        "swift": re.compile(r"^swift-(\d+\.\d+(?:\.\d+)?)-RELEASE$"),
+        "swift": re.compile(r"^swift-(\d+)\.(\d+)(?:\.(\d+))?-RELEASE$"),
         # https://github.com/golang/go/tags
-        "go": re.compile(r"^go(\d+\.\d+(?:\.\d+)?)$"),
-        # "go_pre": re.compile(r"^go(\d+\.\d+(?:\.\d+)?\w+)$"),
+        "go": re.compile(r"^go(\d+)\.(\d+)(?:\.(\d+))?$"),
     }
-
-    async def get_saved_versions(self) -> List[Version]:
-        versions: List[Version] = []
-        query = """
-            select version, pre
-            from Version
-            where software = :software_id
-        """
-
-        results = await database.fetch_all(
-            query=query, values={"software_id": await self.get_id()}
-        )
-
-        for result in results:
-            versions.append(Version(version=result[0], pre=bool(result[1])))
-        return versions
 
     def _fetch_github(self) -> Iterator[Version]:
         tags = github.get_repo(self.repository).get_tags()
         pattern = self._namings.get(self.version_naming)
-        pre_pattern = self._namings.get(self.version_naming + "_pre")
 
         for tag in tags:
             match = pattern.findall(tag.name)
             if match:
-                yield Version(match[0], False)
-            elif pre_pattern:
-                match = pre_pattern.findall(tag.name)
-                if match:
-                    yield Version(match[0], True)
+                match = [int(x) if x else None for x in match[0]]
+                yield Version(*match)
 
     def fetch_versions(self) -> Iterator[Version]:
         fun = getattr(self, f"_fetch_{self.source}")
@@ -135,26 +107,30 @@ class Software:
     async def add_versions(self) -> int:
         software_id = await self.get_id()
         query = """
-            select v.version
+            select v.major, v.minor, v.revision, v.build
             from Version v
             join Software s on s.id = v.software
             where s.slug = :slug
         """
-        saved_versions = await database.fetch_all(
-            query=query, values={"slug": self.slug}
-        )
-        saved_versions = [v[0] for v in saved_versions]
+        result = await database.fetch_all(query=query, values={"slug": self.slug})
+        saved_versions = [Version(*v) for v in result]
 
         fetched_versions = self.fetch_versions()
 
-        new_versions = [v for v in fetched_versions if v.version not in saved_versions]
+        new_versions = [v for v in fetched_versions if v not in saved_versions]
 
         query = """
-            insert into Version(software, version, pre)
-            values(:software, :version, :pre)
+            insert into Version(software, major, minor, revision, build)
+            values(:software, :major, :minor, :revision, :build)
         """
         values = [
-            {"software": software_id, "version": v.version, "pre": v.pre}
+            {
+                "software": software_id,
+                "major": v.major,
+                "minor": v.minor,
+                "revision": v.revision,
+                "build": v.build,
+            }
             for v in new_versions
         ]
         await database.execute_many(query=query, values=values)

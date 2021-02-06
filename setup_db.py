@@ -22,8 +22,10 @@ async def setup_db():
           CREATE TABLE "Version" (
             "id" INTEGER PRIMARY KEY AUTOINCREMENT,
             "software" UUID NOT NULL REFERENCES "Software" ("id") ON DELETE CASCADE,
-            "version" TEXT NOT NULL,
-            "pre" BOOL
+            "major" INTEGER NOT NULL,
+            "minor" INTEGER,
+            "revision" INTEGER,
+            "build" TEXT
           );
         """
     )
@@ -47,9 +49,10 @@ async def setup_db():
     await database.execute(query=query, values=values)
 
     query = (
-        "INSERT INTO Version(software, version, pre) VALUES (:software, :version, :pre)"
+        "INSERT INTO Version(software, major, minor, revision)"
+        + "VALUES (:software, :major, :minor, :revision)"
     )
-    values = {"version": "3.9.1", "pre": False, "software": str(python_uuid)}
+    values = {"major": 3, "minor": 9, "revision": 1, "software": str(python_uuid)}
 
     await database.execute(query=query, values=values)
 

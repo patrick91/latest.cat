@@ -1,4 +1,4 @@
-from starlette.responses import HTMLResponse
+from starlette.responses import HTMLResponse, PlainTextResponse
 
 import butter
 from butter.render import render
@@ -8,6 +8,9 @@ from components.title import title
 
 
 async def four_oh_four(request):
+
+    if "curl/" in request.headers.get("user-agent"):
+        return PlainTextResponse("", status_code=404)
 
     content = root("latest.cat - 404") > [
         logo(),
