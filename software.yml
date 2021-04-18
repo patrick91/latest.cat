@@ -39,3 +39,10 @@
   source: github
   repository: strawberry-graphql/strawberry
   version_naming: basic
+
+- slug: django
+  name: django
+  aliases: []
+  source: github
+  repository: django/django
+  version_naming: basic
