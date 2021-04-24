@@ -41,8 +41,15 @@
   version_naming: basic
 
 - slug: django
-  name: django
+  name: Django
   aliases: []
   source: github
   repository: django/django
+  version_naming: basic
+
+- slug: pip
+  name: pip
+  aliases: []
+  source: github
+  repository: pypa/pip
   version_naming: basic
