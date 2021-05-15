@@ -14,7 +14,7 @@
 
 - slug: python
   name: Python
-  aliases: [py, 🐍, pitone]
+  aliases: [py, 🐍]
   source: github
   repository: python/cpython
   version_naming: python
@@ -53,3 +53,10 @@
   source: github
   repository: pypa/pip
   version_naming: basic
+
+- slug: nodejs
+  name: Node.js
+  aliases: [node]
+  source: github
+  repository: nodejs/node
+  version_naming: python
