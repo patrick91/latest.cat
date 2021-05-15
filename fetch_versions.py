@@ -12,10 +12,11 @@ import yaml
 from databases import Database
 from github import Github
 from data.utils import Version
+from data.config import github_token
 
 logging.basicConfig(level=logging.INFO)
 
-github = Github("38fc66afc7ce30d9fcd0559c9aaf9b5b924b2464", per_page=100)
+github = Github(github_token, per_page=100)
 
 database_path = "db.sqlite"
 database = Database(f"sqlite:///{database_path}")

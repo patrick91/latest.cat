@@ -1,5 +1,6 @@
 from starlette.responses import HTMLResponse, PlainTextResponse
 
+import asyncio
 import butter
 from butter.render import render
 from components.layout import root
@@ -9,6 +10,7 @@ from data.config import database
 from data.utils import Version
 
 from .four_oh_four import four_oh_four
+from data.notion import Notion
 
 
 async def fetch_latest(request):
@@ -25,6 +27,8 @@ async def fetch_latest(request):
     """
     slug = await database.fetch_val(query, {"q": slug_q, "q2": slug_q})
     if slug is None:
+        loop = asyncio.get_event_loop()
+        loop.create_task(Notion.increment_counter(slug_q))
         return await four_oh_four(request)
 
     query = """
