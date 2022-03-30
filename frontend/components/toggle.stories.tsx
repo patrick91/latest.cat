@@ -7,4 +7,6 @@ export default {
   component: Toggle,
 } as ComponentMeta<typeof Toggle>;
 
-export const Primary = () => <Toggle />;
+export const Primary = () => (
+  <Toggle onToggle={(value) => console.log("toggled", value)} />
+);
