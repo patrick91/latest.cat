@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage, NextPageContext } from "next";
 
 import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
@@ -7,7 +7,7 @@ import { Footer } from "components/footer";
 import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
 
-const Home: NextPage = () => {
+const SoftwarePage: NextPage = () => {
   return (
     <>
       <Hero>
@@ -69,4 +69,19 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default SoftwarePage;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // TODO: fetch data
+  if (context.req.headers["user-agent"]?.includes("curl")) {
+    context.res.end("hi");
+
+    return { props: {} };
+  }
+
+  return {
+    props: {
+      software: "python",
+    },
+  };
+};
