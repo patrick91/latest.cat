@@ -4,21 +4,41 @@ import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
 import { Box } from "components/box";
 import { Footer } from "components/footer";
-import { SearchInput } from "components/search-input";
+import { LatestVersion } from "components/latest-version";
+import { UsefulLinks } from "components/useful-links";
 
 const Home: NextPage = () => {
   return (
     <>
       <Hero>
-        <div className="max-w-2xl mx-auto w-11/12">
-          <SearchInput />
+        <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
+          <LatestVersion software="Python" version="3.6.5" />
+        </div>
+
+        <div className="max-w-6xl mx-auto flex justify-center mt-8">
+          <UsefulLinks
+            links={[
+              {
+                title: "Documentation",
+                url: "https://docs.python.org/3/",
+              },
+              {
+                title: "Download Python",
+                url: "https://www.python.org/downloads/",
+              },
+              {
+                title: "Changelog",
+                url: "https://docs.python.org/3/whatsnew/3.7.html",
+              },
+            ]}
+          />
         </div>
       </Hero>
       <Marquee />
 
       <div className="dark:bg-dark dark:text-white">
         <div className="max-w-7xl mx-auto pt-10 w-11/12">
-          <Box title="What is latest.cat?" className="mb-10">
+          <Box title="What is latest.cat?">
             <p className="mb-4 font-bold">
               Ever struggled to find the latest version of a programming
               language?
@@ -37,26 +57,6 @@ const Home: NextPage = () => {
                 latest.cat
               </strong>{" "}
               from the command line!
-            </p>
-          </Box>
-          <Box title="Did you know?" className="bg-mint">
-            <p className="mb-4 font-bold">
-              You can also use latest.cat from the command line:
-            </p>
-            <p className="mb-4 flex">
-              <span className="mr-4 select-none">$</span>
-              <pre>
-                <code>curl -fs latest.cat/python</code>
-              </pre>
-            </p>
-            <p className="mb-4 font-bold">
-              And you can even filter the results by version number:
-            </p>
-            <p className="mb-4 flex">
-              <span className="mr-4 select-none">$</span>
-              <pre>
-                <code>curl -fs latest.cat/python/3.6</code>
-              </pre>
             </p>
           </Box>
 

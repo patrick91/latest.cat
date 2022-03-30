@@ -1,3 +1,7 @@
-export const Logo = () => (
-  <h1 className="font-heading font-bold text-xl">latest.cat</h1>
+import cx from "classnames";
+
+export const Logo = ({ className }: { className?: string }) => (
+  <h1 className={cx("font-heading font-bold text-2xl", className)}>
+    latest.cat
+  </h1>
 );
