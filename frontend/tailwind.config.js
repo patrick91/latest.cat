@@ -23,6 +23,7 @@ module.exports = {
         blue: "#426af8",
         turquoise: "#00fee2",
         "dark-purple": "#341247",
+        "gray": "#d5d5d5",
         "dark-gray": "#2A2929",
       },
       boxShadow: {

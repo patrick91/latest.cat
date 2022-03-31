@@ -6,6 +6,6 @@ export const SearchInput = () => (
       placeholder="Python"
       className="overflow-hidden bg-transparent pl-12 py-8 flex-1 outline-none focus-visible:underline"
     />
-    <button className="px-12 py-8 font-heading font-bold rounded-full hover:bg-gray-200 text-black">Search</button>
+    <button className="px-12 py-8 font-heading font-bold rounded-full hover:bg-gray text-black">Search</button>
   </div>
 );

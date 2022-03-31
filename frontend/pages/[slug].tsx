@@ -124,17 +124,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (context.req.headers["user-agent"]?.includes("curl")) {
     const result = await fetchLatestVersion(slug, false);
-    context.res.end(result.latestVersion);
+    context.res.end(result?.latestVersion);
 
-    return { props: {} };
+    return { notFound: !!result };
   }
 
   const result = await fetchLatestVersion(slug, true);
 
+  if (!result) {
+    return { notFound: true };
+  }
+
   return {
     props: {
-      latestVersion: result.latestVersion,
-      software: result.software,
+      latestVersion: result?.latestVersion,
+      software: result?.software,
     },
   };
 };
