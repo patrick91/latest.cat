@@ -9,16 +9,16 @@ from dataclasses import dataclass
 from typing import Iterator, List, Optional, Tuple
 
 import yaml
+from data.config import github_token
+from data.utils import Version
 from databases import Database
 from github import Github
-from data.utils import Version
-from data.config import github_token
 
 logging.basicConfig(level=logging.INFO)
 
 github = Github(github_token, per_page=100)
 
-database_path = "db.sqlite"
+database_path = "backend/db.sqlite"
 database = Database(f"sqlite:///{database_path}")
 
 

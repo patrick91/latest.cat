@@ -1,16 +1,17 @@
+import asyncio
+
+from data.config import database
+from data.notion import Notion
+from data.utils import Version
 from starlette.responses import HTMLResponse, PlainTextResponse
 
-import asyncio
 import butter
 from butter.render import render
 from components.layout import root
 from components.logo import logo
 from components.title import title
-from data.config import database
-from data.utils import Version
 
 from .four_oh_four import four_oh_four
-from data.notion import Notion
 
 
 async def fetch_latest(request):

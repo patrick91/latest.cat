@@ -7,12 +7,17 @@ import { Footer } from "components/footer";
 import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
 
-const SoftwarePage: NextPage = () => {
+const SoftwarePage: NextPage<{
+  latestVersion: string;
+  software: {
+    name: string;
+  };
+}> = ({ latestVersion, software }) => {
   return (
     <>
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
-          <LatestVersion software="Python" version="3.6.5" />
+          <LatestVersion software={software.name} version={latestVersion} />
         </div>
 
         <div className="max-w-6xl mx-auto flex justify-center mt-8">
@@ -71,17 +76,65 @@ const SoftwarePage: NextPage = () => {
 
 export default SoftwarePage;
 
+const fetchLatestVersion = async (slug: string, fetchSoftware: boolean) => {
+  const API_URL = "http://localhost:8000/graphql";
+  const query = `
+    query FindVersion($slug: String!, $fetchSoftware: Boolean!) {
+      findVersion(slug: $slug) {
+        latestVersion
+        software @include(if: $fetchSoftware) {
+          slug
+          name
+        }
+      }
+    }
+  `;
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      variables: {
+        slug,
+        fetchSoftware,
+      },
+    }),
+  });
+  const json = await res.json();
+
+  if (json.errors) {
+    console.error(json.errors);
+    throw new Error("Failed to fetch API");
+  }
+
+  return json.data.findVersion as {
+    latestVersion: string;
+    software?: {
+      name: string;
+      slug: string;
+    };
+  };
+};
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // TODO: fetch data
+  const slug = context.query.slug as string;
+
   if (context.req.headers["user-agent"]?.includes("curl")) {
-    context.res.end("hi");
+    const result = await fetchLatestVersion(slug, false);
+    context.res.end(result.latestVersion);
 
     return { props: {} };
   }
 
+  const result = await fetchLatestVersion(slug, true);
+
   return {
     props: {
-      software: "python",
+      latestVersion: result.latestVersion,
+      software: result.software,
     },
   };
 };

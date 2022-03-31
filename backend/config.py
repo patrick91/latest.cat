@@ -1,7 +1,8 @@
 import os
+from pathlib import Path
+
 from databases import Database
 from dotenv import load_dotenv
-from pathlib import Path
 
 load_dotenv()
 
