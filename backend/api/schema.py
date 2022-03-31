@@ -16,9 +16,12 @@ async def find_version(
                 from json_each(aliases)
             )
     """
-    slug, software_name = await database.fetch_one(
-        software_query, {"q": slug, "q2": slug}
-    )
+    data = await database.fetch_one(software_query, {"q": slug, "q2": slug})
+
+    if data is None:
+        return None
+
+    slug, software_name = data
 
     """if slug is None:
         loop = asyncio.get_event_loop()
