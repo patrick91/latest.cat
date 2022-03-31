@@ -8,15 +8,17 @@ from utils import Version
 async def find_version(
     slug: str, version: str | None = None
 ) -> FindVersionResult | None:
-    query = """
-        SELECT slug FROM Software
+    software_query = """
+        SELECT slug, name FROM Software
         WHERE slug LIKE :q
             OR :q2 IN (
                 select value
                 from json_each(aliases)
             )
     """
-    slug = await database.fetch_val(query, {"q": slug, "q2": slug})
+    slug, software_name = await database.fetch_one(
+        software_query, {"q": slug, "q2": slug}
+    )
 
     """if slug is None:
         loop = asyncio.get_event_loop()
@@ -65,7 +67,7 @@ async def find_version(
     version = Version(*result)
 
     return FindVersionResult(
-        latest_version=str(version), software=Software(name="Python", slug="python")
+        latest_version=str(version), software=Software(name=software_name, slug=slug)
     )
 
 
