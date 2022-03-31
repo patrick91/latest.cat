@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import strawberry
 from config import database
 from utils import Version
 
 
 async def find_version(
-    slug: str, version: str | None = None
-) -> FindVersionResult | None:
+    slug: str, version: Optional[str] = None
+) -> Optional[FindVersionResult]:
     software_query = """
         SELECT slug, name FROM Software
         WHERE slug LIKE :q
@@ -88,7 +90,7 @@ class FindVersionResult:
 
 @strawberry.type
 class Query:
-    find_version: FindVersionResult | None = strawberry.field(resolver=find_version)
+    find_version: Optional[FindVersionResult] = strawberry.field(resolver=find_version)
 
 
 schema = strawberry.Schema(query=Query)
