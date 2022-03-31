@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 const Latest404: NextPage = () => {
   const softwareName =
-    typeof window !== "undefined" ? window.location.pathname.split('/')[1] : "";
+    typeof window !== "undefined" ? window.location.pathname.split("/")[1] : "";
 
   const text = `Hey @patrick91! I think "${softwareName}" is missing from https://latest.cat, can you please add it?`;
 
@@ -45,7 +45,7 @@ const Latest404: NextPage = () => {
 
       <div className="dark:bg-dark dark:text-white">
         <div className="max-w-7xl mx-auto pt-10 w-11/12">
-          <Box title="What is latest.cat?">
+          <Box title="What is latest.cat?" className="bg-mint">
             <p className="mb-4 font-bold">
               Ever struggled to find the latest version of a programming
               language?
