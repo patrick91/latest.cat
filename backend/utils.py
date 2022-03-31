@@ -1,8 +1,7 @@
-from pydantic.dataclasses import dataclass
+import re
 from typing import Optional
 
-
-import re
+from pydantic.dataclasses import dataclass
 
 
 @dataclass
@@ -25,8 +24,7 @@ class Version:
     @classmethod
     def from_string(cls, version_string: str):
         pattern = re.compile(r"^(\d+)(?:\.(\d+)(?:\.(\d+)(?:(\w+))?)?)?$")
-        match = pattern.findall(version_string)
-        if match:
+        if match := pattern.findall(version_string):
             match = [int(x) if x else None for x in match[0]]
             print(match)
             return cls(*match)

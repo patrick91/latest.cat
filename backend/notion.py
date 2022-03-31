@@ -1,5 +1,6 @@
 import json
 import logging
+
 import requests
 
 from .config import notion_db, notion_token
