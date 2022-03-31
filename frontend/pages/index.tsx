@@ -5,13 +5,32 @@ import { Marquee } from "components/marquee";
 import { Box } from "components/box";
 import { Footer } from "components/footer";
 import { SearchInput } from "components/search-input";
+import { FormEventHandler } from "react";
+import Head from "next/head";
 
 const Home: NextPage = () => {
+  const goToSoftware: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+
+    const data = Object.fromEntries(new FormData(event.currentTarget));
+
+    if (data.software) {
+      window.location.href = `/${data.software}`;
+    }
+  };
+
   return (
     <>
+      <Head>
+        <title>
+          latest.cat - find the latest version of your favourite software
+        </title>
+      </Head>
       <Hero>
         <div className="max-w-2xl mx-auto w-11/12">
-          <SearchInput />
+          <form onSubmit={goToSoftware}>
+            <SearchInput />
+          </form>
         </div>
       </Hero>
       <Marquee />
@@ -32,10 +51,9 @@ const Home: NextPage = () => {
               Type your favorite programming language name in the search bar,
               hit enter and you will immediately see the latest releases of that
               programming language.
-              <br />
-              You can even use <strong className="font-bold">
-                latest.cat
-              </strong>{" "}
+            </p>
+            <p className="mb-4">
+              You can even use <strong className="font-bold">latest.cat</strong>{" "}
               from the command line!
             </p>
           </Box>
