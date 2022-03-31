@@ -43,22 +43,26 @@ const Home: NextPage = () => {
             <p className="mb-4 font-bold">
               You can also use latest.cat from the command line:
             </p>
-            <p className="mb-4 flex overflow-scroll">
-              <span className="mr-4 select-none">$</span>
-              <pre>
-                <code>curl -fs latest.cat/python</code>
-              </pre>
-            </p>
-            <p className="mb-4 font-bold">
-              And you can even filter the results by version number:
-            </p>
+            <div>
+              <p className="mb-4 flex overflow-scroll">
+                <span className="mr-4 select-none">$</span>
+                <pre>
+                  <code>curl -fs latest.cat/python</code>
+                </pre>
+              </p>
+            </div>
+            <div>
+              <p className="mb-4 font-bold">
+                And you can even filter the results by version number:
+              </p>
 
-            <p className="mb-4 flex overflow-scroll">
-              <span className="mr-4 select-none">$</span>
-              <pre>
-                <code>curl -fs latest.cat/python/3.6</code>
-              </pre>
-            </p>
+              <p className="mb-4 flex overflow-scroll">
+                <span className="mr-4 select-none">$</span>
+                <pre>
+                  <code>curl -fs latest.cat/python/3.6</code>
+                </pre>
+              </p>
+            </div>
           </Box>
 
           <div className="mt-10">
