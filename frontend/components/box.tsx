@@ -11,7 +11,7 @@ export const Box = ({
 }) => (
   <div
     className={cx(
-      "bg-green shadow-drop rounded-[40px] px-5 py-5 ",
+      "shadow-drop rounded-[40px] px-5 py-5 ",
       "border border-black dark:bg-dark-gray md:grid grid-cols-[1fr_2fr]",
       className
     )}

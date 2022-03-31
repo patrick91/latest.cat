@@ -18,7 +18,7 @@ const Home: NextPage = () => {
 
       <div className="dark:bg-dark dark:text-white">
         <div className="max-w-7xl mx-auto pt-10 w-11/12">
-          <Box title="What is latest.cat?" className="mb-10">
+          <Box title="What is latest.cat?" className="mb-10 bg-green">
             <p className="mb-4 font-bold">
               Ever struggled to find the latest version of a programming
               language?
