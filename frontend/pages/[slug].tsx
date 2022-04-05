@@ -6,6 +6,7 @@ import { Box } from "components/box";
 import { Footer } from "components/footer";
 import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
+import { AboutBox } from "components/about-box";
 
 const SoftwarePage: NextPage<{
   latestVersion: string;
@@ -43,27 +44,7 @@ const SoftwarePage: NextPage<{
 
       <div className="dark:bg-dark dark:text-white">
         <div className="max-w-7xl mx-auto pt-10 w-11/12">
-          <Box title="What is latest.cat?">
-            <p className="mb-4 font-bold">
-              Ever struggled to find the latest version of a programming
-              language?
-            </p>
-            <p className="mb-4">
-              <strong className="font-bold">latest.cat</strong> is a simple,
-              fast and free way to browse the latest releases of your favorite
-              programming language.
-            </p>
-            <p className="mb-4">
-              Type your favorite programming language name in the search bar,
-              hit enter and you will immediately see the latest releases of that
-              programming language.
-              <br />
-              You can even use <strong className="font-bold">
-                latest.cat
-              </strong>{" "}
-              from the command line!
-            </p>
-          </Box>
+          <AboutBox />
 
           <div className="mt-10">
             <Footer />

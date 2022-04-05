@@ -7,6 +7,7 @@ import { Footer } from "components/footer";
 import { SearchInput } from "components/search-input";
 import { FormEventHandler } from "react";
 import Head from "next/head";
+import { AboutBox } from "components/about-box";
 
 const Home: NextPage = () => {
   const goToSoftware: FormEventHandler<HTMLFormElement> = (event) => {
@@ -37,26 +38,7 @@ const Home: NextPage = () => {
 
       <div className="dark:bg-dark dark:text-white">
         <div className="max-w-7xl mx-auto pt-10 w-11/12">
-          <Box title="What is latest.cat?" className="mb-10 bg-green">
-            <p className="mb-4 font-bold">
-              Ever struggled to find the latest version of a programming
-              language?
-            </p>
-            <p className="mb-4">
-              <strong className="font-bold">latest.cat</strong> is a simple,
-              fast and free way to browse the latest releases of your favorite
-              programming language.
-            </p>
-            <p className="mb-4">
-              Type your favorite programming language name in the search bar,
-              hit enter and you will immediately see the latest releases of that
-              programming language.
-            </p>
-            <p className="mb-4">
-              You can even use <strong className="font-bold">latest.cat</strong>{" "}
-              from the command line!
-            </p>
-          </Box>
+          <AboutBox />
           <Box title="Did you know?" className="bg-mint">
             <p className="mb-4 font-bold">
               You can also use latest.cat from the command line:

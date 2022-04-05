@@ -54,7 +54,7 @@ export const UsefulLinks = ({
   <div
     className="
       mt-4 mx-auto bg-opacity-60 bg-white border-2 border-cosmos rounded-3xl md:rounded-full relative
-      px-10 py-14
+      px-10 py-14 dark:text-black
     "
   >
     <TitleBox />
