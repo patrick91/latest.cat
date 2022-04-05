@@ -77,7 +77,7 @@ const SoftwarePage: NextPage<{
 export default SoftwarePage;
 
 const fetchLatestVersion = async (slug: string, fetchSoftware: boolean) => {
-  const API_URL = "http://localhost:8000/graphql";
+  const API_URL = "https://latest.cat/graphql";
   const query = `
     query FindVersion($slug: String!, $fetchSoftware: Boolean!) {
       findVersion(slug: $slug) {
