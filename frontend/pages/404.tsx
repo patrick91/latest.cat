@@ -8,6 +8,7 @@ import { SoftwareNotFound } from "components/software-not-found";
 import { useRouter } from "next/router";
 import { AboutBox } from "components/about-box";
 import Head from "next/head";
+import { Meta } from "components/meta";
 
 const Latest404: NextPage = () => {
   const softwareName =
@@ -22,7 +23,10 @@ const Latest404: NextPage = () => {
   return (
     <>
       <Head>
-        <title>404!!1 - {softwareName} is not found on latest.cat</title>
+        <Meta
+          title={`404!!1 - ${softwareName} is not found on latest.cat`}
+          path="/"
+        />
       </Head>
 
       <Hero>

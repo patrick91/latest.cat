@@ -8,6 +8,7 @@ import { SearchInput } from "components/search-input";
 import { FormEventHandler } from "react";
 import Head from "next/head";
 import { AboutBox } from "components/about-box";
+import { Meta } from "components/meta";
 
 const Home: NextPage = () => {
   const goToSoftware: FormEventHandler<HTMLFormElement> = (event) => {
@@ -23,9 +24,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>
-          latest.cat - find the latest version of your favourite software
-        </title>
+        <Meta title="latest.cat - find the latest version of your favourite software" path="/" />
       </Head>
       <Hero>
         <div className="max-w-2xl mx-auto w-11/12">

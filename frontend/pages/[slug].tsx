@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage, NextPageContext } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
 import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
@@ -7,6 +7,7 @@ import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
 import { AboutBox } from "components/about-box";
 import Head from "next/head";
+import { Meta } from "components/meta";
 
 const SoftwarePage: NextPage<{
   latestVersion: string;
@@ -21,9 +22,10 @@ const SoftwarePage: NextPage<{
   return (
     <>
       <Head>
-        <title>
-          {software.name} latest version is {latestVersion} - latest.cat
-        </title>
+        <Meta
+          title={`${software.name} latest version is ${latestVersion} - latest.cat`}
+          path="/"
+        />
       </Head>
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
@@ -31,9 +33,7 @@ const SoftwarePage: NextPage<{
         </div>
 
         <div className="max-w-6xl mx-auto flex justify-center mt-8">
-          <UsefulLinks
-            links={software.links}
-          />
+          <UsefulLinks links={software.links} />
         </div>
       </Hero>
       <Marquee />
