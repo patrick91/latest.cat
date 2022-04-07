@@ -47,7 +47,7 @@ const Home: NextPage = () => {
               <p className="mb-4 flex overflow-scroll">
                 <span className="mr-4 select-none">$</span>
                 <pre>
-                  <code>curl -fs latest.cat/python</code>
+                  <code>curl -Lfs latest.cat/python</code>
                 </pre>
               </p>
             </div>
@@ -59,7 +59,7 @@ const Home: NextPage = () => {
               <p className="mb-4 flex overflow-scroll">
                 <span className="mr-4 select-none">$</span>
                 <pre>
-                  <code>curl -fs latest.cat/python/3.6</code>
+                  <code>curl -Lfs latest.cat/python/3.6</code>
                 </pre>
               </p>
             </div>
