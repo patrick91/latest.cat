@@ -12,12 +12,18 @@ const SoftwarePage: NextPage<{
   latestVersion: string;
   software: {
     name: string;
+    links: {
+      url: string;
+      title: string;
+    }[];
   };
 }> = ({ latestVersion, software }) => {
   return (
     <>
       <Head>
-        <title>{software.name} latest version is {latestVersion} - latest.cat</title>
+        <title>
+          {software.name} latest version is {latestVersion} - latest.cat
+        </title>
       </Head>
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
@@ -26,20 +32,7 @@ const SoftwarePage: NextPage<{
 
         <div className="max-w-6xl mx-auto flex justify-center mt-8">
           <UsefulLinks
-            links={[
-              {
-                title: "Documentation",
-                url: "https://docs.python.org/3/",
-              },
-              {
-                title: "Download Python",
-                url: "https://www.python.org/downloads/",
-              },
-              {
-                title: "Changelog",
-                url: "https://docs.python.org/3/whatsnew/3.7.html",
-              },
-            ]}
+            links={software.links}
           />
         </div>
       </Hero>
@@ -69,6 +62,10 @@ const fetchLatestVersion = async (slug: string, fetchSoftware: boolean) => {
         software @include(if: $fetchSoftware) {
           slug
           name
+          links {
+            title: name
+            url
+          }
         }
       }
     }

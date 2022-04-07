@@ -1,17 +1,26 @@
 from __future__ import annotations
 
-from typing import Optional
+import json
+from typing import List, Optional
 
 import strawberry
 from config import database
 from utils import Version
 
 
+def _get_link_with_version(url: str, version: Version) -> str:
+    return (
+        url.replace("{version}", str(version))
+        .replace("{major}", str(version.major or ""))
+        .replace("{minor}", str(version.minor or ""))
+    )
+
+
 async def find_version(
     slug: str, version: Optional[str] = None
 ) -> Optional[FindVersionResult]:
     software_query = """
-        SELECT slug, name FROM Software
+        SELECT slug, name, links FROM Software
         WHERE slug LIKE :q
             OR :q2 IN (
                 select value
@@ -23,7 +32,8 @@ async def find_version(
     if data is None:
         return None
 
-    slug, software_name = data
+    slug, software_name, links = data
+    links = json.loads(links)
 
     """if slug is None:
         loop = asyncio.get_event_loop()
@@ -71,15 +81,31 @@ async def find_version(
 
     version = Version(*result)
 
+    links = [
+        Link(
+            url=_get_link_with_version(link["url"], version),
+            name=link["name"],
+        )
+        for link in links
+    ]
+
     return FindVersionResult(
-        latest_version=str(version), software=Software(name=software_name, slug=slug)
+        latest_version=str(version),
+        software=Software(name=software_name, slug=slug, links=links),
     )
+
+
+@strawberry.type
+class Link:
+    url: str
+    name: str
 
 
 @strawberry.type
 class Software:
     name: str
     slug: str
+    links: List[Link]
 
 
 @strawberry.type
