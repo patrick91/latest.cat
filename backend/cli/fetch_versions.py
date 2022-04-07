@@ -9,17 +9,23 @@ from dataclasses import dataclass
 from typing import Iterator, List, Optional, Tuple
 
 import yaml
-from data.config import github_token
-from data.utils import Version
+from config import github_token
 from databases import Database
 from github import Github
+from utils import Version
 
 logging.basicConfig(level=logging.INFO)
 
 github = Github(github_token, per_page=100)
 
-database_path = "backend/db.sqlite"
+database_path = "db.sqlite"
 database = Database(f"sqlite:///{database_path}")
+
+
+@dataclass
+class Link:
+    url: str
+    name: str
 
 
 @dataclass
@@ -30,6 +36,7 @@ class Software:
     source: str
     version_naming: str
     repository: Optional[str]
+    links: List[Link]
 
     _namings = {
         # https://github.com/rust-lang/rust/tags
@@ -76,30 +83,32 @@ class Software:
         if current_id:
             query = """
                 update Software
-                set name = :name, aliases = :aliases
+                set name = :name, aliases = :aliases, links = :links
                 where id = :id
             """
             values = {
                 "name": self.name,
                 "aliases": json.dumps(self.aliases),
+                "links": json.dumps(self.links),
                 "id": current_id,
             }
         else:
             software_id = uuid.uuid4()
             query = """
-                insert into Software(id, name, slug, aliases)
-                values (:id, :name, :slug, :aliases)
+                insert into Software(id, name, slug, aliases, links)
+                values (:id, :name, :slug, :aliases, :links)
             """
             values = {
                 "name": self.name,
                 "slug": self.slug,
                 "aliases": json.dumps(self.aliases),
+                "links": json.dumps(self.links),
                 "id": str(software_id),
             }
         await database.execute(query=query, values=values)
 
         query = """
-            select id, name, slug, aliases
+            select id, name, slug, aliases, links
             from Software
             where slug = :slug
         """

@@ -1,8 +1,6 @@
-import json
-import uuid
 from asyncio import run
 
-from data.config import database
+from config import database
 
 
 async def setup_db():
@@ -13,7 +11,8 @@ async def setup_db():
             "id" UUID NOT NULL PRIMARY KEY,
             "name" TEXT NOT NULL,
             "slug" TEXT NOT NULL,
-            "aliases" JSON
+            "aliases" JSON,
+            "links" JSON
           );
         """
     )
@@ -32,29 +31,6 @@ async def setup_db():
     await database.execute(
         query='CREATE INDEX "idx_version__software" ON "Version" ("software")'
     )
-
-    python_uuid = uuid.uuid4()
-
-    query = """
-        INSERT INTO Software(id, name, slug, aliases)
-        VALUES (:id, :name, :slug, :aliases)
-    """
-    values = {
-        "name": "Python",
-        "slug": "python",
-        "aliases": json.dumps(["py", "🐍"]),
-        "id": str(python_uuid),
-    }
-
-    await database.execute(query=query, values=values)
-
-    query = (
-        "INSERT INTO Version(software, major, minor, revision)"
-        + "VALUES (:software, :major, :minor, :revision)"
-    )
-    values = {"major": 3, "minor": 9, "revision": 1, "software": str(python_uuid)}
-
-    await database.execute(query=query, values=values)
 
 
 run(setup_db())

@@ -1,0 +1,123 @@
+- slug: go
+  name: Go
+  aliases: [golang]
+  source: github
+  repository: golang/go
+  version_naming: go
+  links:
+    - name: docs
+      url: https://go.dev/doc/
+    - name: playground
+      url: https://go.dev/play/
+    - name: release notes
+      url: https://go.dev/doc/go{version}
+
+- slug: swift
+  name: Swift
+  aliases: [apple]
+  source: github
+  repository: apple/swift
+  version_naming: swift
+  links:
+    - name: docs
+      url: https://www.swift.org/documentation/
+    - name: Changelog
+      url: https://github.com/apple/swift/blob/main/CHANGELOG.md
+
+- slug: python
+  name: Python
+  aliases: [py, 🐍]
+  source: github
+  repository: python/cpython
+  version_naming: python
+  links:
+    - name: docs
+      url: https://docs.python.org/3/
+    - name: Release notes
+      url: https://docs.python.org/3/whatsnew/{major}.{minor}.html
+    - name: Download
+      url: https://www.python.org/downloads/
+
+- slug: php
+  name: PHP
+  aliases: []
+  source: github
+  repository: php/php-src
+  version_naming: php
+  links:
+    - name: docs
+      url: https://www.php.net/manual/en/
+    - name: Release notes
+      url: https://www.php.net/ChangeLog-{major}.php
+    - name: Download
+      url: https://www.php.net/downloads
+
+- slug: rust
+  name: Rust
+  aliases: []
+  source: github
+  repository: rust-lang/rust
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://www.rust-lang.org/learn
+    - name: Release notes
+      url: https://github.com/rust-lang/rust/blob/master/RELEASES.md
+    - name: Playground
+      url: https://play.rust-lang.org/
+
+- slug: strawberry
+  name: Strawberry
+  aliases: [strawberry-graphql]
+  source: github
+  repository: strawberry-graphql/strawberry
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://docs.strawberry.rocks
+    - name: Release notes
+      url: https://github.com/strawberry-graphql/strawberry/releases/tag/{version}
+    - name: Playground
+      url: https://la4de.github.io/strawberry-playground
+
+- slug: django
+  name: Django
+  aliases: []
+  source: github
+  repository: django/django
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://docs.djangoproject.com/en/{major}.{minor}/
+    - name: Release notes
+      url: https://docs.djangoproject.com/en/{major}.{minor}/releases/{version}/
+    - name: Download
+      url: https://www.djangoproject.com/download/
+
+- slug: pip
+  name: pip
+  aliases: []
+  source: github
+  repository: pypa/pip
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://pip.pypa.io/en/stable/
+    - name: Release notes
+      url: https://pip.pypa.io/en/stable/news/
+    - name: Download
+      url: https://pypi.org/project/pip/
+
+- slug: nodejs
+  name: Node.js
+  aliases: [node]
+  source: github
+  repository: nodejs/node
+  version_naming: python
+  links:
+    - name: docs
+      url: https://nodejs.org/docs/latest-v{major}.x/api/
+    - name: Release notes
+      url: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V{major}.md#{version}
+    - name: Download
+      url: https://nodejs.org/en/download/

@@ -24,7 +24,8 @@ jobs:
           pip install -U pip
           pip install poetry
           poetry install
-          poetry run python fetch_versions.py
+          poetry run python -m cli.fetch_versions
+        working-directory: backend
 
       - name: commit files
         run: |
