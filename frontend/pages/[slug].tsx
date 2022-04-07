@@ -2,11 +2,11 @@ import type { GetServerSideProps, NextPage, NextPageContext } from "next";
 
 import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
-import { Box } from "components/box";
 import { Footer } from "components/footer";
 import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
 import { AboutBox } from "components/about-box";
+import Head from "next/head";
 
 const SoftwarePage: NextPage<{
   latestVersion: string;
@@ -16,6 +16,9 @@ const SoftwarePage: NextPage<{
 }> = ({ latestVersion, software }) => {
   return (
     <>
+      <Head>
+        <title>{software.name} latest version is {latestVersion} - latest.cat</title>
+      </Head>
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
           <LatestVersion software={software.name} version={latestVersion} />

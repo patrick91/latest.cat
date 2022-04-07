@@ -7,6 +7,7 @@ import { Footer } from "components/footer";
 import { SoftwareNotFound } from "components/software-not-found";
 import { useRouter } from "next/router";
 import { AboutBox } from "components/about-box";
+import Head from "next/head";
 
 const Latest404: NextPage = () => {
   const softwareName =
@@ -20,6 +21,10 @@ const Latest404: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>404!!1 - {softwareName} is not found on latest.cat</title>
+      </Head>
+
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
           <SoftwareNotFound />
