@@ -7,8 +7,8 @@ export const LatestVersion = ({
 }) => (
   <div
     className="
-      border text-4xl font-heading font-black bg-mint border-black rounded-full shadow-drop px-12 py-8
-      text-center inline-block text-black
+      border text-4xl font-heading font-black bg-mint border-black rounded-3xl md:rounded-full shadow-drop px-12 py-8
+      text-center inline-block text-black mb-10
     "
   >
     latest version for <span className="text-blue">{software}</span> is{" "}

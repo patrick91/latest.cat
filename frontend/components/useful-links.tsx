@@ -25,7 +25,7 @@ export const Link = ({
     target="_blank"
     rel="noopener noreferrer"
     className={cx(
-      "block border-2 border-black shadow-drop rounded-full p-4 font-bold text-xl mb-4 mr-4",
+      "block border-2 border-black shadow-drop rounded-full p-4 font-bold text-xl mb-4 md:mr-4",
       className
     )}
   >
@@ -58,14 +58,14 @@ export const UsefulLinks = ({
 }) => (
   <div
     className="
-      mt-4 mx-auto bg-opacity-60 bg-white border-2 border-cosmos rounded-3xl md:rounded-full relative
-      px-10 py-14 dark:text-black
+      mt-4 bg-opacity-60 bg-white border-2 border-cosmos rounded-3xl md:rounded-full relative
+      px-5 md:px-10 py-14 dark:text-black w-full mx-5 md:mx-auto md:w-auto
     "
   >
     <TitleBox />
 
-    <Diamond className="left-0 -translate-x-1/2" />
-    <Diamond className="right-0 translate-x-1/2" />
+    <Diamond className="left-0 -translate-x-1/2 hidden md:block" />
+    <Diamond className="right-0 translate-x-1/2 hidden md:block" />
 
     <div className="md:flex justify-around flex-wrap">
       {links.map(({ title, url }, index) => (

@@ -65,14 +65,14 @@ const Background = () => (
 );
 
 export const Hero = ({ children }: { children?: React.ReactNode }) => (
-  <div className="bg-pink pb-40 relative overflow-hidden dark:bg-dark dark:text-white">
+  <div className="bg-pink pb-20 relative overflow-hidden dark:bg-dark dark:text-white">
     <div className="relative z-10">
       <Header />
 
-      <div className="max-w-xl mx-auto text-center mt-40 mb-20">
-        <Logo className="text-7xl mb-5" />
+      <div className="max-w-xl mx-auto text-center mt-20 mb-20">
+        <Logo className="text-6xl md:text-7xl mb-5" />
 
-        <p className="text-5xl font-sans">
+        <p className="text-4xl font-sans px-5 md:px-0">
           Find the latest version of your favourite software
         </p>
       </div>
