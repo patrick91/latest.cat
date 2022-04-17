@@ -43,6 +43,11 @@ const Diamond = ({ className }: { className?: string }) => (
   ></div>
 );
 
+const toTitleCase = (str: string) =>
+  str.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+  });
+
 export const UsefulLinks = ({
   links,
 }: {
@@ -73,7 +78,7 @@ export const UsefulLinks = ({
             "bg-spring-bud": (index + 1) % 3 === 0,
           })}
         >
-          {title}
+          {toTitleCase(title)}
         </Link>
       ))}
     </div>

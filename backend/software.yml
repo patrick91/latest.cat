@@ -78,7 +78,7 @@
     - name: Release notes
       url: https://github.com/strawberry-graphql/strawberry/releases/tag/{version}
     - name: Playground
-      url: https://la4de.github.io/strawberry-playground
+      url: https://play.strawberry.rocks
 
 - slug: django
   name: Django

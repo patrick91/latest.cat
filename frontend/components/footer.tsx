@@ -13,8 +13,8 @@ const FooterLink = ({
 );
 
 export const Footer = () => (
-  <footer className="max-w-7xl mx-auto px-10 py-5 flex justify-between align-middle">
-    <Logo className="text-xl" />
+  <footer className="max-w-7xl mx-auto py-5 md:px-10 md:flex justify-between align-middle">
+    <Logo className="text-xl md:mb-0 mb-5" />
 
     <div>
       Made by{" "}
@@ -30,7 +30,7 @@ export const Footer = () => (
       .
     </div>
 
-    <div>
+    <div className="md:block hidden">
       <a href="https://github.com/patrick91/latest.cat">GitHub</a>
     </div>
   </footer>
