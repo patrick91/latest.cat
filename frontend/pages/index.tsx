@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
 import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
@@ -24,7 +24,10 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <Meta title="latest.cat - find the latest version of your favourite software" path="/" />
+        <Meta
+          title="latest.cat - find the latest version of your favourite software"
+          path="/"
+        />
       </Head>
       <Hero>
         <div className="max-w-2xl mx-auto w-11/12">
@@ -74,3 +77,17 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const slug = context.query.slug as string;
+
+  if (context.req.headers["user-agent"]?.includes("curl")) {
+    context.res.end("Try running `curl -fsL latest.cat/python` 🐈 \n");
+
+    return { props: {} };
+  }
+
+  return {
+    props: {},
+  };
+};
