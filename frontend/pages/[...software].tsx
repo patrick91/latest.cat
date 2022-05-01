@@ -11,6 +11,7 @@ import { Meta } from "components/meta";
 
 const SoftwarePage: NextPage<{
   latestVersion: string;
+  version?: string;
   software: {
     name: string;
     links: {
@@ -18,7 +19,7 @@ const SoftwarePage: NextPage<{
       title: string;
     }[];
   };
-}> = ({ latestVersion, software }) => {
+}> = ({ latestVersion, software, version }) => {
   return (
     <>
       <Head>
@@ -29,7 +30,7 @@ const SoftwarePage: NextPage<{
       </Head>
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
-          <LatestVersion software={software.name} version={latestVersion} />
+          <LatestVersion software={software.name} version={latestVersion} requestedVersion={version}/>
         </div>
 
         <div className="max-w-6xl mx-auto flex justify-center mt-8">
@@ -53,11 +54,19 @@ const SoftwarePage: NextPage<{
 
 export default SoftwarePage;
 
-const fetchLatestVersion = async (slug: string, fetchSoftware: boolean) => {
+const fetchLatestVersion = async ({
+  slug,
+  version,
+  fetchSoftware,
+}: {
+  slug: string;
+  version?: string;
+  fetchSoftware: boolean;
+}) => {
   const API_URL = "https://latest.cat/graphql";
   const query = `
-    query FindVersion($slug: String!, $fetchSoftware: Boolean!) {
-      findVersion(slug: $slug) {
+    query FindVersion($slug: String!, $version: String, $fetchSoftware: Boolean!) {
+      findVersion(slug: $slug, version: $version) {
         latestVersion
         software @include(if: $fetchSoftware) {
           slug
@@ -80,6 +89,7 @@ const fetchLatestVersion = async (slug: string, fetchSoftware: boolean) => {
       query,
       variables: {
         slug,
+        version: version || null,
         fetchSoftware,
       },
     }),
@@ -101,10 +111,15 @@ const fetchLatestVersion = async (slug: string, fetchSoftware: boolean) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const slug = context.query.slug as string;
+  const [slug, ...versionBits] = context.query.software as string[];
+  const version = versionBits.join(".");
 
   if (context.req.headers["user-agent"]?.includes("curl")) {
-    const result = await fetchLatestVersion(slug, false);
+    const result = await fetchLatestVersion({
+      slug,
+      version,
+      fetchSoftware: false,
+    });
 
     if (!result) {
       return { notFound: true };
@@ -115,7 +130,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: {} };
   }
 
-  const result = await fetchLatestVersion(slug, true);
+  const result = await fetchLatestVersion({
+    slug,
+    version,
+    fetchSoftware: true,
+  });
 
   if (!result) {
     return { notFound: true };
@@ -123,6 +142,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
+      version,
       latestVersion: result?.latestVersion,
       software: result?.software,
     },

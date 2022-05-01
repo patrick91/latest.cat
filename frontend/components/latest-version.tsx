@@ -1,9 +1,11 @@
 export const LatestVersion = ({
   software,
   version,
+  requestedVersion,
 }: {
   software: string;
   version: string;
+  requestedVersion?: string;
 }) => (
   <div
     className="
@@ -11,7 +13,11 @@ export const LatestVersion = ({
       text-center inline-block text-black mb-10
     "
   >
-    latest version for <span className="text-blue">{software}</span> is{" "}
-    <span className="text-blue">{version}</span>
+    latest version for{" "}
+    <span className="text-blue">
+      {software}
+      {requestedVersion ? `@${requestedVersion}` : ""}
+    </span>{" "}
+    is <span className="text-blue">{version}</span>
   </div>
 );
