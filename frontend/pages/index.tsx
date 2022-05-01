@@ -6,7 +6,6 @@ import { Box } from "components/box";
 import { Footer } from "components/footer";
 import { SearchInput } from "components/search-input";
 import { FormEventHandler } from "react";
-import Head from "next/head";
 import { AboutBox } from "components/about-box";
 import { Meta } from "components/meta";
 
@@ -23,12 +22,10 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <Meta
-          title="latest.cat - find the latest version of your favourite software"
-          path="/"
-        />
-      </Head>
+      <Meta
+        title="latest.cat - find the latest version of your favourite software"
+        path="/"
+      />
       <Hero>
         <div className="max-w-2xl mx-auto w-11/12">
           <form onSubmit={goToSoftware}>
@@ -46,24 +43,24 @@ const Home: NextPage = () => {
               You can also use latest.cat from the command line:
             </p>
             <div>
-              <p className="mb-4 flex overflow-scroll">
+              <div className="mb-4 flex overflow-scroll">
                 <span className="mr-4 select-none">$</span>
                 <pre>
                   <code>curl -Lfs latest.cat/python</code>
                 </pre>
-              </p>
+              </div>
             </div>
             <div>
               <p className="mb-4 font-bold">
                 And you can even filter the results by version number:
               </p>
 
-              <p className="mb-4 flex overflow-scroll">
+              <div className="mb-4 flex overflow-scroll">
                 <span className="mr-4 select-none">$</span>
                 <pre>
                   <code>curl -Lfs latest.cat/python/3.6</code>
                 </pre>
-              </p>
+              </div>
             </div>
           </Box>
 

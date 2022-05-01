@@ -1,3 +1,6 @@
+import Head from "next/head";
+
+
 export const Meta = ({
   title,
   path,
@@ -10,7 +13,7 @@ export const Meta = ({
   const url = `https://latest.cat${path}`;
 
   return (
-    <>
+    <Head>
       <title>{title}</title>
       <meta name="title" content={title} />
       <meta name="description" content="" />
@@ -26,6 +29,6 @@ export const Meta = ({
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content="/social-card.png" />
-    </>
+    </Head>
   );
 };

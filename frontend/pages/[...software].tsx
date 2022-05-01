@@ -6,7 +6,6 @@ import { Footer } from "components/footer";
 import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
 import { AboutBox } from "components/about-box";
-import Head from "next/head";
 import { Meta } from "components/meta";
 
 const SoftwarePage: NextPage<{
@@ -22,15 +21,18 @@ const SoftwarePage: NextPage<{
 }> = ({ latestVersion, software, version }) => {
   return (
     <>
-      <Head>
-        <Meta
-          title={`${software.name} latest version is ${latestVersion} - latest.cat`}
-          path="/"
-        />
-      </Head>
+      <Meta
+        title={`${software.name} latest version is ${latestVersion} - latest.cat`}
+        path="/"
+      />
+
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
-          <LatestVersion software={software.name} version={latestVersion} requestedVersion={version}/>
+          <LatestVersion
+            software={software.name}
+            version={latestVersion}
+            requestedVersion={version}
+          />
         </div>
 
         <div className="max-w-6xl mx-auto flex justify-center mt-8">

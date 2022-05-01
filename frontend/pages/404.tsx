@@ -1,13 +1,10 @@
-import type { GetServerSideProps, NextPage, NextPageContext } from "next";
+import type { NextPage } from "next";
 
 import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
-import { Box } from "components/box";
 import { Footer } from "components/footer";
 import { SoftwareNotFound } from "components/software-not-found";
-import { useRouter } from "next/router";
 import { AboutBox } from "components/about-box";
-import Head from "next/head";
 import { Meta } from "components/meta";
 
 const Latest404: NextPage = () => {
@@ -22,12 +19,10 @@ const Latest404: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <Meta
-          title={`404!!1 - ${softwareName} is not found on latest.cat`}
-          path="/"
-        />
-      </Head>
+      <Meta
+        title={`404!!1 - ${softwareName} is not found on latest.cat`}
+        path="/"
+      />
 
       <Hero>
         <div className="max-w-7xl mx-auto w-10/12 flex justify-center">
