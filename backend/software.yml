@@ -121,3 +121,17 @@
       url: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V{major}.md#{version}
     - name: Download
       url: https://nodejs.org/en/download/
+
+- slug: ocaml
+  name: OCaml
+  aliases: [ocamel]
+  source: github
+  repository: ocaml/ocaml
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://nodejs.org/docs/latest-v{major}.x/api/
+    - name: Release notes
+      url: https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V{major}.md#{version}
+    - name: Download
+      url: https://nodejs.org/en/download/
