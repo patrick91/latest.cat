@@ -8,5 +8,5 @@ export default {
 } as ComponentMeta<typeof Toggle>;
 
 export const Primary = () => (
-  <Toggle onToggle={(value) => console.log("toggled", value)} />
+  <Toggle onToggle={(value) => console.log("toggled", value)} checked={false} />
 );
