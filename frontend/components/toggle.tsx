@@ -1,6 +1,8 @@
 export const Toggle = ({
+  checked,
   onToggle,
 }: {
+  checked: boolean;
   onToggle: (value: boolean) => void;
 }) => (
   <div
@@ -18,6 +20,7 @@ export const Toggle = ({
       type="checkbox"
       id="dark-mode-toggle"
       className="peer hidden"
+      defaultChecked={checked}
       onClick={(event) => {
         // @ts-ignore
         onToggle(event.target.checked);
