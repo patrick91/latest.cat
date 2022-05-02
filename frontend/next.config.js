@@ -6,7 +6,7 @@ const nextConfig = {
     return [
       {
         source: "/graphql",
-        destination: "https://latest-cat-65bwarhayq-ew.a.run.app/graphql",
+        destination: process.env.BACKEND_ENDPOINT,
       },
     ];
   },

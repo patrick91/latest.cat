@@ -65,7 +65,7 @@ const fetchLatestVersion = async ({
   version?: string;
   fetchSoftware: boolean;
 }) => {
-  const API_URL = "https://latest.cat/graphql";
+  const API_URL = process.env.BACKEND_ENDPOINT
   const query = `
     query FindVersion($slug: String!, $version: String, $fetchSoftware: Boolean!) {
       findVersion(slug: $slug, version: $version) {
