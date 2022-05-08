@@ -4,7 +4,7 @@ export const SearchInput = () => (
       type="search"
       name="software"
       placeholder="Python"
-      className="overflow-hidden bg-transparent pl-12 py-8 flex-1 outline-none focus-visible:underline"
+      className="overflow-hidden bg-transparent pl-12 py-8 flex-1 outline-none focus-visible:underline dark:text-black"
     />
     <button className="px-12 py-8 font-heading font-bold rounded-full hover:bg-gray text-black">Search</button>
   </div>
