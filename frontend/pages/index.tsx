@@ -43,7 +43,7 @@ const Home: NextPage = () => {
               You can also use latest.cat from the command line:
             </p>
             <div>
-              <div className="mb-4 flex overflow-scroll">
+              <div className="mb-4 flex overflow-auto">
                 <span className="mr-4 select-none">$</span>
                 <pre>
                   <code>curl -Lfs latest.cat/python</code>
@@ -55,7 +55,7 @@ const Home: NextPage = () => {
                 And you can even filter the results by version number:
               </p>
 
-              <div className="mb-4 flex overflow-scroll">
+              <div className="mb-4 flex overflow-auto">
                 <span className="mr-4 select-none">$</span>
                 <pre>
                   <code>curl -Lfs latest.cat/python/3.6</code>
