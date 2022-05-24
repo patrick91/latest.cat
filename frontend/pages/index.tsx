@@ -8,6 +8,7 @@ import { SearchInput } from "components/search-input";
 import { FormEventHandler } from "react";
 import { AboutBox } from "components/about-box";
 import { Meta } from "components/meta";
+import { Command } from "components/command";
 
 const Home: NextPage = () => {
   const goToSoftware: FormEventHandler<HTMLFormElement> = (event) => {
@@ -42,25 +43,12 @@ const Home: NextPage = () => {
             <p className="mb-4 font-bold">
               You can also use latest.cat from the command line:
             </p>
-            <div>
-              <div className="mb-4 flex overflow-auto">
-                <span className="mr-4 select-none">$</span>
-                <pre>
-                  <code>curl -Lfs latest.cat/python</code>
-                </pre>
-              </div>
-            </div>
+            <Command text="curl -Lfs latest.cat/python" />
             <div>
               <p className="mb-4 font-bold">
                 And you can even filter the results by version number:
               </p>
-
-              <div className="mb-4 flex overflow-auto">
-                <span className="mr-4 select-none">$</span>
-                <pre>
-                  <code>curl -Lfs latest.cat/python/3.6</code>
-                </pre>
-              </div>
+              <Command text="curl -Lfs latest.cat/python/3.6" />
             </div>
           </Box>
 
