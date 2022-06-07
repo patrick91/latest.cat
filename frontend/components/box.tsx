@@ -12,11 +12,11 @@ export const Box = ({
   <div
     className={cx(
       "shadow-drop rounded-[40px] px-5 py-5 ",
-      "border border-black dark:bg-dark-gray md:grid grid-cols-[1fr_2fr]",
+      "border border-black dark:bg-dark-gray lg:grid grid-cols-[1fr_2fr] gap-4",
       className
     )}
   >
-    <h1 className="font-heading text-4xl font-bold mt-5 mb-10 md:m-0 md:text-5xl md:px-10 md:flex items-center">
+    <h1 className="font-heading text-4xl font-bold mt-5 mb-10 lg:m-0 lg:text-5xl lg:flex items-center">
       {title}
     </h1>
     <div className="text-2xl">{children}</div>

@@ -1,14 +1,12 @@
 export const Command = ({ text }: { text: string }) => (
-  <div className="flex flex-col sm:flex-row items-baseline justify-between">
-    <div className="mb-4 flex overflow-auto text-[1rem] sm:text-[1em]">
-      <span className="mr-2 sm:mr-4 select-none">$</span>
-      <pre>
-        <code>{text}</code>
-      </pre>
-    </div>
+  <div className="mb-4 flex overflow-scroll md:overflow-auto w-full">
+    <span className="mr-2 sm:mr-4 select-none">$</span>
+    <pre>
+      <code>{text}</code>
+    </pre>
     <button
       onClick={() => navigator.clipboard.writeText(text)}
-      className="px-2 py-1 font-heading font-medium rounded-full hidden sm:inline hover:bg-gray text-black transition active:bg-dark-gray active:text-white"
+      className="ml-auto px-2 py-1 font-heading font-medium rounded-full hidden sm:inline hover:bg-gray text-black transition active:bg-dark-gray active:text-white items-center"
     >
       Copy
     </button>
