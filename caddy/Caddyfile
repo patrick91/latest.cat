@@ -4,10 +4,9 @@
 
 
 latest.cat {
-	header_up Accept-Encoding identity
+	curl_response true
+
 	reverse_proxy https://latest-cat.vercel.app {
 		header_up Host latest-cat.vercel.app
 	}
 }
-
-curl_response true
