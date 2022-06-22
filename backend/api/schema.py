@@ -20,7 +20,7 @@ async def find_version(
     slug: str, version: Optional[str] = None
 ) -> Optional[FindVersionResult]:
     software_query = """
-        SELECT slug, name, links FROM Software
+        SELECT id, slug, name, links FROM Software
         WHERE slug LIKE :q
             OR :q2 IN (
                 select value
@@ -32,7 +32,7 @@ async def find_version(
     if data is None:
         return None
 
-    slug, software_name, links = data
+    id, slug, software_name, links = data
     links = json.loads(links)
 
     """if slug is None:
@@ -91,8 +91,35 @@ async def find_version(
 
     return FindVersionResult(
         latest_version=str(version),
-        software=Software(name=software_name, slug=slug, links=links),
+        software=Software(id=id, name=software_name, slug=slug, links=links),
     )
+
+
+async def get_all_software() -> list[SoftwareWithMajorVersions]:
+    query = """
+        select
+            id,
+            name,
+            slug,
+            (select
+                JSON_GROUP_ARRAY(DISTINCT(major))
+                from Version
+                where software = S.id
+            ) as versions
+        from Software S;
+    """
+
+    data = await database.fetch_all(query)
+
+    def convert_row(row: dict[str, str]) -> SoftwareWithMajorVersions:
+        id, name, slug, versions_json = row
+
+        versions = sorted(json.loads(versions_json))
+        software = Software(strawberry.ID(id), name, slug, links=[])
+
+        return SoftwareWithMajorVersions(software=software, major_versions=versions)
+
+    return [convert_row(row) for row in data]  # type: ignore
 
 
 @strawberry.type
@@ -103,9 +130,16 @@ class Link:
 
 @strawberry.type
 class Software:
+    id: strawberry.ID
     name: str
     slug: str
     links: List[Link]
+
+
+@strawberry.type
+class SoftwareWithMajorVersions:
+    software: Software
+    major_versions: List[str]
 
 
 @strawberry.type
@@ -117,6 +151,9 @@ class FindVersionResult:
 @strawberry.type
 class Query:
     find_version: Optional[FindVersionResult] = strawberry.field(resolver=find_version)
+    all_software: List[SoftwareWithMajorVersions] = strawberry.field(
+        resolver=get_all_software
+    )
 
 
 schema = strawberry.Schema(query=Query)
