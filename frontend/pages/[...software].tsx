@@ -73,10 +73,18 @@ export const getStaticProps: GetStaticProps<any, { software: string[] }> =
       fetchSoftware: true,
     });
 
+    const latestVersion = result?.latestVersion;
+
+    if (!latestVersion) {
+      return {
+        notFound: true,
+      };
+    }
+
     return {
       props: {
         version,
-        latestVersion: result?.latestVersion,
+        latestVersion,
         software: result?.software,
       },
     };
