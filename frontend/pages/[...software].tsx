@@ -1,4 +1,9 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+} from "next";
 
 import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
@@ -112,41 +117,17 @@ const fetchLatestVersion = async ({
   };
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const [slug, ...versionBits] = context.query.software as string[];
-  const version = versionBits.join(".");
-
-  if (context.req.headers["user-agent"]?.includes("curl")) {
-    const result = await fetchLatestVersion({
-      slug,
-      version,
-      fetchSoftware: false,
-    });
-
-    if (!result) {
-      return { notFound: true };
-    }
-
-    context.res.end(result?.latestVersion);
-
-    return { props: {} };
-  }
-
-  const result = await fetchLatestVersion({
-    slug,
-    version,
-    fetchSoftware: true,
-  });
-
-  if (!result) {
-    return { notFound: true };
-  }
-
+export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      version,
-      latestVersion: result?.latestVersion,
-      software: result?.software,
+      person: 1,
     },
+  };
+};
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = ["1"];
+  return {
+    paths,
+    fallback: false,
   };
 };
