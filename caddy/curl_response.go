@@ -53,7 +53,7 @@ func (m Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddy
 	}
 
 	if r.URL.Path == "/" {
-		w.Write([]byte("👋 Welcome to latest.cat, try running curl -Lfs latest.cat/python"))
+		w.Write([]byte("👋 Welcome to latest.cat, try running curl -Lfs latest.cat/python\n"))
 
 		return nil
 	}
