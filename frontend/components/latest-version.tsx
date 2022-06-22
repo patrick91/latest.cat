@@ -18,6 +18,9 @@ export const LatestVersion = ({
       {software}
       {requestedVersion ? `@${requestedVersion}` : ""}
     </span>{" "}
-    is <span className="text-blue">{version}</span>
+    is{" "}
+    <span className="text-blue" data-version={version}>
+      {version}
+    </span>
   </div>
 );

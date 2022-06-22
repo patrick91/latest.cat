@@ -1,4 +1,9 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+} from "next";
 
 import { Hero } from "components/hero";
 import { Marquee } from "components/marquee";
@@ -7,6 +12,7 @@ import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
 import { AboutBox } from "components/about-box";
 import { Meta } from "components/meta";
+import { fetchAllSoftware, fetchLatestVersion } from "lib/api";
 
 const SoftwarePage: NextPage<{
   latestVersion: string;
@@ -56,97 +62,41 @@ const SoftwarePage: NextPage<{
 
 export default SoftwarePage;
 
-const fetchLatestVersion = async ({
-  slug,
-  version,
-  fetchSoftware,
-}: {
-  slug: string;
-  version?: string;
-  fetchSoftware: boolean;
-}) => {
-  const API_URL = "https://latest.cat/graphql";
-  const query = `
-    query FindVersion($slug: String!, $version: String, $fetchSoftware: Boolean!) {
-      findVersion(slug: $slug, version: $version) {
-        latestVersion
-        software @include(if: $fetchSoftware) {
-          slug
-          name
-          links {
-            title: name
-            url
-          }
-        }
-      }
-    }
-  `;
+export const getStaticProps: GetStaticProps<any, { software: string[] }> =
+  async (context) => {
+    const [slug, ...versionBits] = context.params!.software;
+    const version = versionBits.join(".");
 
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query,
-      variables: {
-        slug,
-        version: version || null,
-        fetchSoftware,
-      },
-    }),
-  });
-  const json = await res.json();
-
-  if (json.errors) {
-    console.error(json.errors);
-    throw new Error("Failed to fetch API");
-  }
-
-  return json.data.findVersion as {
-    latestVersion: string;
-    software?: {
-      name: string;
-      slug: string;
-    };
-  };
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const [slug, ...versionBits] = context.query.software as string[];
-  const version = versionBits.join(".");
-
-  if (context.req.headers["user-agent"]?.includes("curl")) {
     const result = await fetchLatestVersion({
       slug,
       version,
-      fetchSoftware: false,
+      fetchSoftware: true,
     });
 
-    if (!result) {
-      return { notFound: true };
-    }
+    return {
+      props: {
+        version,
+        latestVersion: result?.latestVersion,
+        software: result?.software,
+      },
+    };
+  };
 
-    context.res.end(result?.latestVersion);
+export const getStaticPaths: GetStaticPaths = async () => {
+  const softwares = await fetchAllSoftware();
 
-    return { props: {} };
-  }
-
-  const result = await fetchLatestVersion({
-    slug,
-    version,
-    fetchSoftware: true,
-  });
-
-  if (!result) {
-    return { notFound: true };
-  }
+  const paths = softwares.flatMap((software) =>
+    software.majorVersions.map((version) => ({
+      params: { software: [software.software.slug, version] },
+    }))
+  );
 
   return {
-    props: {
-      version,
-      latestVersion: result?.latestVersion,
-      software: result?.software,
-    },
+    paths: paths.concat(
+      softwares.map((software) => ({
+        params: { software: [software.software.slug] },
+      }))
+    ),
+    fallback: "blocking",
   };
 };

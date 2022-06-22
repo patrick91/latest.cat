@@ -1,0 +1,11 @@
+{
+	order curl_response before respond
+}
+
+:2015
+
+reverse_proxy localhost:3001 {
+	header_up Accept-Encoding identity
+}
+
+curl_response true
