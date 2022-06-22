@@ -12,6 +12,7 @@ import { LatestVersion } from "components/latest-version";
 import { UsefulLinks } from "components/useful-links";
 import { AboutBox } from "components/about-box";
 import { Meta } from "components/meta";
+import { fetchAllSoftware, fetchLatestVersion } from "lib/api";
 
 const SoftwarePage: NextPage<{
   latestVersion: string;
@@ -61,73 +62,41 @@ const SoftwarePage: NextPage<{
 
 export default SoftwarePage;
 
-const fetchLatestVersion = async ({
-  slug,
-  version,
-  fetchSoftware,
-}: {
-  slug: string;
-  version?: string;
-  fetchSoftware: boolean;
-}) => {
-  const API_URL = "https://latest.cat/graphql";
-  const query = `
-    query FindVersion($slug: String!, $version: String, $fetchSoftware: Boolean!) {
-      findVersion(slug: $slug, version: $version) {
-        latestVersion
-        software @include(if: $fetchSoftware) {
-          slug
-          name
-          links {
-            title: name
-            url
-          }
-        }
-      }
-    }
-  `;
+export const getStaticProps: GetStaticProps<any, { software: string[] }> =
+  async (context) => {
+    const [slug, ...versionBits] = context.params!.software;
+    const version = versionBits.join(".");
 
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query,
-      variables: {
-        slug,
-        version: version || null,
-        fetchSoftware,
+    const result = await fetchLatestVersion({
+      slug,
+      version,
+      fetchSoftware: true,
+    });
+
+    return {
+      props: {
+        version,
+        latestVersion: result?.latestVersion,
+        software: result?.software,
       },
-    }),
-  });
-  const json = await res.json();
-
-  if (json.errors) {
-    console.error(json.errors);
-    throw new Error("Failed to fetch API");
-  }
-
-  return json.data.findVersion as {
-    latestVersion: string;
-    software?: {
-      name: string;
-      slug: string;
     };
   };
-};
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  return {
-    props: {
-      person: 1,
-    },
-  };
-};
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = ["1"];
+  const softwares = await fetchAllSoftware();
+
+  const paths = softwares.flatMap((software) =>
+    software.majorVersions.map((version) => ({
+      params: { software: [software.software.slug, version] },
+    }))
+  );
+
   return {
-    paths,
+    paths: paths.concat(
+      softwares.map((software) => ({
+        params: { software: [software.software.slug] },
+      }))
+    ),
     fallback: false,
   };
 };
