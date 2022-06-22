@@ -48,8 +48,12 @@ func (m *Middleware) Validate() error {
 }
 
 func (m Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhttp.Handler) error {
-	if !m.Enabled || !isCurl(r) {
+	if !m.Enabled || !isCurl(r) || r.URL.Path == "/graphql" {
 		return next.ServeHTTP(w, r)
+	}
+
+	if r.URL.Path == "/" {
+		w.Write([]byte("Welcome to latest.cat, try running curl -Lfs latest.cat/python"))
 	}
 
 	respBuf := bufPool.Get().(*bytes.Buffer)
