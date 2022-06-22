@@ -2,10 +2,12 @@
 	order curl_response before respond
 }
 
-:2015
 
-reverse_proxy localhost:3001 {
+latest.cat {
 	header_up Accept-Encoding identity
+	reverse_proxy https://latest-cat.vercel.app {
+		header_up Host latest-cat.vercel.app
+	}
 }
 
 curl_response true
