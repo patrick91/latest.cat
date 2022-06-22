@@ -97,6 +97,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
         params: { software: [software.software.slug] },
       }))
     ),
-    fallback: false,
+    fallback: "blocking",
   };
 };
