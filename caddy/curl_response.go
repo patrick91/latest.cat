@@ -85,7 +85,7 @@ func (m Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddy
 	var version string
 
 	if len(result) > 0 {
-		version = result[0][1]
+		version = strings.TrimSpace(result[0][1])
 	} else {
 		version = "unknown"
 	}
