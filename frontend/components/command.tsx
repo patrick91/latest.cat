@@ -6,7 +6,7 @@ export const Command = ({ text }: { text: string }) => (
     </pre>
     <button
       onClick={() => navigator.clipboard.writeText(text)}
-      className="ml-auto px-2 py-1 font-heading font-medium rounded-full hidden sm:inline hover:bg-gray text-black transition active:bg-dark-gray active:text-white items-center"
+      className="ml-auto px-2 py-1 font-heading font-medium rounded-full hidden sm:inline hover:bg-gray text-black transition active:bg-dark-gray active:text-white items-center dark:text-white dark:hover:text-black"
     >
       Copy
     </button>

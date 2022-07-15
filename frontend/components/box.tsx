@@ -16,7 +16,7 @@ export const Box = ({
       className
     )}
   >
-    <h1 className="font-heading text-4xl font-bold mt-5 mb-10 lg:m-0 lg:text-5xl lg:flex items-center">
+    <h1 className="font-heading text-4xl font-bold mt-5 mb-10 lg:m-0 lg:text-5xl lg:flex items-center md:text-center">
       {title}
     </h1>
     <div className="text-2xl">{children}</div>
