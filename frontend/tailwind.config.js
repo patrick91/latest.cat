@@ -15,7 +15,7 @@ module.exports = {
         green: "#B0FFB8",
         "spring-bud": "#a6fd00",
         pink: "#FFE6E6",
-        cosmos: "#ffcbcc",
+        cosmos: "#ffcdcd",
         gold: "#ffd200",
         yellow: "#F9EF05",
         corn: "#ffee87",
