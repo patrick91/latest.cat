@@ -1,15 +1,19 @@
+FROM python:3.9-slim AS builder
+
+RUN pip install -U pip setuptools wheel
+RUN pip install pdm
+
+COPY pyproject.toml pdm.lock /project/
+
+WORKDIR /project
+RUN pdm export -o requirements.txt
+
 
 FROM tiangolo/uvicorn-gunicorn:python3.9
 
-# Install Poetry
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+ENV PYTHONPATH=/project/pkgs
+COPY --from=builder /project/requirements.txt /app
 
-# Copy using poetry.lock* in case it doesn't exist yet
-COPY ./pyproject.toml ./poetry.lock* /app/
-
-RUN poetry install --no-root --no-dev
+RUN pip install -r requirements.txt
 
 COPY . /app

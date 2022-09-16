@@ -1,33 +1,41 @@
-[tool.poetry]
-name = "backend"
-version = "0.1.0"
+
+[project]
+authors = [
+  {name = "Patrick Arminio", email = "patrick.arminio@gmail.com"},
+]
+dependencies = [
+  "strawberry-graphql<1.0.0,>=0.104.1",
+  "starlette==0.17.1",
+  "uvicorn<1.0.0,>=0.17.6",
+  "pydantic<2.0.0,>=1.9.0",
+  "databases<1.0.0,>=0.5.5",
+  "python-dotenv<1.0.0,>=0.20.0",
+  "aiosqlite<1.0.0,>=0.17.0",
+  "PyYAML<7.0,>=6.0",
+  "PyGithub<2.0,>=1.55",
+]
 description = ""
-authors = ["Patrick Arminio <patrick.arminio@gmail.com>"]
-license = "MIT"
+license = {text = "MIT"}
+name = "backend"
+requires-python = ">=3.9,<4.0"
+version = "0.1.0"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-strawberry-graphql = "^0.104.1"
-starlette = "0.17.1"
-uvicorn = "^0.17.6"
-pydantic = "^1.9.0"
-databases = "^0.5.5"
-python-dotenv = "^0.20.0"
-aiosqlite = "^0.17.0"
-PyYAML = "^6.0"
-PyGithub = "^1.55"
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+  "flake8<5.0.0,>=4.0.1",
+  "mypy<1.0,>=0.942",
+  "black<23.0.0,>=22.3.0",
+]
 
-[tool.poetry.dev-dependencies]
-flake8 = "^4.0.1"
-mypy = "^0.942"
-black = {version = "^22.3.0", allow-prereleases = true}
-
+[tool.pdm.build]
+includes = []
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+build-backend = "pdm.pep517.api"
+requires = ["pdm-pep517>=1.0.0"]
 
 [tool.mypy]
 plugins = [
   "strawberry.ext.mypy_plugin",
-  "pydantic.mypy"
+  "pydantic.mypy",
 ]
