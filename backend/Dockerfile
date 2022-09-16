@@ -16,4 +16,6 @@ COPY --from=builder /project/requirements.txt /app
 
 RUN pip install -r requirements.txt
 
+ENV PORT "8080"
+
 COPY . /app

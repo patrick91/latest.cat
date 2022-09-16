@@ -28,6 +28,10 @@ dev = [
   "black<23.0.0,>=22.3.0",
 ]
 
+[tool.pdm.scripts]
+server = "uvicorn --reload main:app"
+fetch = "python -m cli.fetch_versions"
+
 [tool.pdm.build]
 includes = []
 [build-system]

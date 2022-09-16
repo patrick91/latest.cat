@@ -22,9 +22,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install -U pip
-          pip install poetry
-          poetry install
-          poetry run python -m cli.fetch_versions
+          pip install pdm
+          pdm install
+          pdm fetch
         working-directory: backend
 
       - name: commit files

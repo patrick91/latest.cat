@@ -79,7 +79,9 @@ async def find_version(
     if result is None:
         return None
 
-    version = Version(*result)
+    major, minor, revision, build = result
+
+    version = Version(major=major, minor=minor, revision=revision, build=build)
 
     links = [
         Link(
@@ -115,7 +117,7 @@ async def get_all_software() -> list[SoftwareWithMajorVersions]:
         id, name, slug, versions_json = row
 
         versions = sorted(json.loads(versions_json))
-        software = Software(strawberry.ID(id), name, slug, links=[])
+        software = Software(id=strawberry.ID(id), name=name, slug=slug, links=[])
 
         return SoftwareWithMajorVersions(software=software, major_versions=versions)
 
