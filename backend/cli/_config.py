@@ -1,14 +1,12 @@
 import os
 from pathlib import Path
-
-from databases import Database
 from dotenv import load_dotenv
 
-load_dotenv()
+HERE = Path(__file__).parent
 
-database_path = Path(".").parent / "db.sqlite"
+load_dotenv(HERE.parent / ".env")
 
-database = Database(f"sqlite:///{database_path}")
+# TODO: use pydantic for this
 
 github_token = os.getenv("GITHUB_TOKEN")
 

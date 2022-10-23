@@ -1,161 +1,95 @@
-from __future__ import annotations
-
-import json
-from typing import List, Optional
+from collections import defaultdict
 
 import strawberry
-from config import database
-from utils import Version
+from prisma.types import VersionWhereInput
+from strawberry.types.info import Info
 
-
-def _get_link_with_version(url: str, version: Version) -> str:
-    return (
-        url.replace("{version}", str(version))
-        .replace("{major}", str(version.major or ""))
-        .replace("{minor}", str(version.minor or ""))
-    )
-
-
-async def find_version(
-    slug: str, version: Optional[str] = None
-) -> Optional[FindVersionResult]:
-    software_query = """
-        SELECT id, slug, name, links FROM Software
-        WHERE slug LIKE :q
-            OR :q2 IN (
-                select value
-                from json_each(aliases)
-            )
-    """
-    data = await database.fetch_one(software_query, {"q": slug, "q2": slug})
-
-    if data is None:
-        return None
-
-    id, slug, software_name, links = data
-    links = json.loads(links)
-
-    """if slug is None:
-        loop = asyncio.get_event_loop()
-        loop.create_task(Notion.increment_counter(slug_q))
-        return await four_oh_four(request)
-    """
-
-    query = """
-        SELECT major, minor, revision, build FROM Version
-        INNER JOIN Software on Software.id = Version.Software
-        WHERE Software.slug = :slug {}
-        ORDER BY
-            Version.major DESC,
-            Version.minor DESC,
-            Version.revision DESC,
-            Version.build DESC
-    """
-
-    where = ""
-    values = {"slug": slug}
-
-    if version:
-        if not (filter_version := Version.from_string(version)):
-            return None
-
-        if filter_version.major is not None:
-            where += " AND Version.major = :major"
-            values["major"] = filter_version.major
-        if filter_version.minor is not None:
-            where += " AND Version.minor = :minor"
-            values["minor"] = filter_version.minor
-        if filter_version.revision is not None:
-            where += " AND Version.revision = :revision"
-            values["revision"] = filter_version.revision
-        if filter_version.build is not None:
-            where += " AND Version.build like :build"
-            values["build"] = f"{filter_version.build}%"
-
-    query = query.format(where)
-
-    result = await database.fetch_one(query, values)
-
-    if result is None:
-        return None
-
-    major, minor, revision, build = result
-
-    version = Version(major=major, minor=minor, revision=revision, build=build)
-
-    links = [
-        Link(
-            url=_get_link_with_version(link["url"], version),
-            name=link["name"],
-        )
-        for link in links
-    ]
-
-    return FindVersionResult(
-        latest_version=str(version),
-        software=Software(id=id, name=software_name, slug=slug, links=links),
-    )
-
-
-async def get_all_software() -> list[SoftwareWithMajorVersions]:
-    query = """
-        select
-            id,
-            name,
-            slug,
-            (select
-                JSON_GROUP_ARRAY(DISTINCT(major))
-                from Version
-                where software = S.id
-            ) as versions
-        from Software S;
-    """
-
-    data = await database.fetch_all(query)
-
-    def convert_row(row: dict[str, str]) -> SoftwareWithMajorVersions:
-        id, name, slug, versions_json = row
-
-        versions = sorted(json.loads(versions_json))
-        software = Software(id=strawberry.ID(id), name=name, slug=slug, links=[])
-
-        return SoftwareWithMajorVersions(software=software, major_versions=versions)
-
-    return [convert_row(row) for row in data]  # type: ignore
-
-
-@strawberry.type
-class Link:
-    url: str
-    name: str
-
-
-@strawberry.type
-class Software:
-    id: strawberry.ID
-    name: str
-    slug: str
-    links: List[Link]
-
-
-@strawberry.type
-class SoftwareWithMajorVersions:
-    software: Software
-    major_versions: List[str]
-
-
-@strawberry.type
-class FindVersionResult:
-    latest_version: str
-    software: Software
+from .context import Context
+from .types import FindVersionResult, Software, SoftwareWithMajorVersions
 
 
 @strawberry.type
 class Query:
-    find_version: Optional[FindVersionResult] = strawberry.field(resolver=find_version)
-    all_software: List[SoftwareWithMajorVersions] = strawberry.field(
-        resolver=get_all_software
-    )
+    @strawberry.field
+    async def find_version(
+        self, info: Info[Context, None], slug: str, version: str | None = None
+    ) -> FindVersionResult | None:
+        software = await info.context["db"].software.find_unique(
+            where={"slug": slug},
+            include={"links": True},
+        )
+
+        if not software:
+            return None
+
+        where: VersionWhereInput = {"software_id": software.id}
+
+        if version:
+            major, *rest = version.split(".")
+
+            where["major"] = int(major)
+
+            if rest:
+                where["minor"] = int(rest[0])
+
+        latest_version = await info.context["db"].version.find_first(
+            where=where,
+            order=[{"major": "desc"}, {"minor": "desc"}, {"patch": "desc"}],
+        )
+
+        # TODO: handle this case better
+        if not latest_version:
+            return None
+
+        latest_version_str = (
+            f"{latest_version.major}.{latest_version.minor}.{latest_version.patch}"
+        )
+
+        return FindVersionResult(
+            latest_version=latest_version_str,
+            software=Software.from_db(software, latest_version),
+        )
+
+    @strawberry.field
+    async def all_software(
+        self, info: Info[Context, None]
+    ) -> list[SoftwareWithMajorVersions]:
+        database = info.context["db"]
+
+        versions = await database.version.group_by(
+            by=["software_id", "major"],
+        )
+
+        # TODO: this api doesn't make a lot of sense, might be better to return
+        # all the versions for a software? 🤔
+
+        ids = filter(None, [version.get("software_id") for version in versions])
+
+        softwares = await database.software.find_many(
+            where={"id": {"in": list(ids)}},
+            include={"links": True},
+        )
+
+        major_versions_by_software = defaultdict[int, list[str]](list)
+
+        for version in versions:
+            software_id = version.get("software_id")
+
+            if software_id is None:
+                continue
+
+            if software_id not in major_versions_by_software:
+                major_versions_by_software[software_id] = []
+
+            major_versions_by_software[software_id].append(str(version.get("major")))
+
+        return [
+            SoftwareWithMajorVersions(
+                software=Software.from_db(software),
+                major_versions=major_versions_by_software[software.id],
+            )
+            for software in softwares
+        ]
 
 
 schema = strawberry.Schema(query=Query)

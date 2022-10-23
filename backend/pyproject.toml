@@ -4,33 +4,40 @@ authors = [
   {name = "Patrick Arminio", email = "patrick.arminio@gmail.com"},
 ]
 dependencies = [
-  "strawberry-graphql<1.0.0,>=0.104.1",
-  "starlette==0.17.1",
-  "uvicorn<1.0.0,>=0.17.6",
-  "pydantic<2.0.0,>=1.9.0",
-  "databases<1.0.0,>=0.5.5",
-  "python-dotenv<1.0.0,>=0.20.0",
-  "aiosqlite<1.0.0,>=0.17.0",
-  "PyYAML<7.0,>=6.0",
-  "PyGithub<2.0,>=1.55",
+    "strawberry-graphql<1.0.0,>=0.104.1",
+    "starlette==0.17.1",
+    "uvicorn<1.0.0,>=0.17.6",
+    "pydantic<2.0.0,>=1.9.0",
+    "databases<1.0.0,>=0.5.5",
+    "python-dotenv<1.0.0,>=0.20.0",
+    "aiosqlite<1.0.0,>=0.17.0",
+    "PyYAML<7.0,>=6.0",
+    "PyGithub<2.0,>=1.55",
+    "prisma>=0.7.0",
+    "typer>=0.6.1",
+    "rich>=12.6.0",
+    "httpx>=0.23.0",
 ]
 description = ""
 license = {text = "MIT"}
 name = "backend"
 requires-python = ">=3.9,<4.0"
 version = "0.1.0"
+[project.optional-dependencies]
 
 [tool.pdm]
 [tool.pdm.dev-dependencies]
 dev = [
-  "flake8<5.0.0,>=4.0.1",
-  "mypy<1.0,>=0.942",
-  "black<23.0.0,>=22.3.0",
+    "flake8<5.0.0,>=4.0.1",
+    "mypy<1.0,>=0.942",
+    "black<23.0.0,>=22.3.0",
+    "pdbpp>=0.10.3",
 ]
 
 [tool.pdm.scripts]
 server = "uvicorn --reload main:app"
 fetch = "python -m cli.fetch_versions"
+cli = "python -m cli"
 
 [tool.pdm.build]
 includes = []
