@@ -18,12 +18,15 @@ model Link {
 }
 
 model Software {
-    id      Int       @id @default(autoincrement())
+    id      Int     @id @default(autoincrement())
     name    String
-    slug    String    @unique
+    slug    String  @unique
     aliases Alias[]
     links   Link[]
-    version Version[]
+
+    latest_version    Version?  @relation(name: "latest", fields: [latest_version_id], references: [id])
+    latest_version_id Int?      @unique
+    Version           Version[] @relation(name: "software")
 }
 
 model Alias {
@@ -34,11 +37,12 @@ model Alias {
 }
 
 model Version {
-    id          Int      @id @default(autoincrement())
-    software_id Int
+    id          Int       @id @default(autoincrement())
     major       Int
     minor       Int?
     patch       Int?
     build       String?
-    software    Software @relation(fields: [software_id], references: [id], onDelete: Cascade, onUpdate: NoAction) @ignore
+    latest_for  Software? @relation(name: "latest")
+    software    Software  @relation(name: "software", fields: [software_id], references: [id])
+    software_id Int
 }

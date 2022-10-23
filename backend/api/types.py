@@ -44,11 +44,14 @@ class Software:
     name: str
     slug: str
     links: list[Link]
+    latest_version: str | None
 
     @classmethod
     def from_db(
         cls, software: models.Software, version: models.Version | None = None
     ) -> Self:
+        latest_version = software.latest_version
+
         return cls(
             id=strawberry.ID(str(software.id)),
             name=software.name,
@@ -57,6 +60,9 @@ class Software:
                 [Link.from_db(link, version) for link in software.links]
                 if software.links
                 else []
+            ),
+            latest_version=(
+                _get_version_string(latest_version) if latest_version else None
             ),
         )
 

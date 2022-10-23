@@ -16,7 +16,7 @@ class Query:
     ) -> FindVersionResult | None:
         software = await info.context["db"].software.find_unique(
             where={"slug": slug},
-            include={"links": True},
+            include={"links": True, "latest_version": True},
         )
 
         if not software:
@@ -77,7 +77,7 @@ class Query:
 
         softwares = await database.software.find_many(
             where={"id": {"in": list(ids)}},
-            include={"links": True},
+            include={"links": True, "latest_version": True},
         )
 
         major_versions_by_software = defaultdict[int, list[str]](list)
