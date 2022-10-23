@@ -100,12 +100,17 @@ def fetch_versions():
                         "create": {
                             "name": software["name"],
                             "slug": software["slug"],
-                            # maybe another table?
-                            "aliases": json.dumps(software["aliases"]),
                         },
                         "update": {},
                     },
                 )
+
+                await db.alias.delete_many(where={"software_id": db_software.id})
+
+                for alias in software["aliases"]:
+                    await db.alias.create(
+                        data={"software_id": db_software.id, "name": alias}
+                    )
 
                 await db.version.delete_many(
                     {

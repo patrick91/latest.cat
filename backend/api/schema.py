@@ -20,7 +20,17 @@ class Query:
         )
 
         if not software:
-            return None
+            alias = await info.context["db"].alias.find_first(
+                where={"name": slug},
+                include={"software": {"include": {"links": True}}},
+            )
+
+            if not alias:
+                return None
+
+            software = alias.software
+
+            assert software
 
         where: VersionWhereInput = {"software_id": software.id}
 

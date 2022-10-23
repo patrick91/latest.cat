@@ -21,9 +21,16 @@ model Software {
     id      Int       @id @default(autoincrement())
     name    String
     slug    String    @unique
-    aliases String
+    aliases Alias[]
     links   Link[]
     version Version[]
+}
+
+model Alias {
+    id          Int      @id @default(autoincrement())
+    name        String
+    software    Software @relation(fields: [software_id], references: [id])
+    software_id Int
 }
 
 model Version {
