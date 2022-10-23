@@ -11,6 +11,36 @@ from .types import FindVersionResult, Software, SoftwareWithMajorVersions
 @strawberry.type
 class Query:
     @strawberry.field
+    async def find_softwares(
+        self, info: Info[Context, None], query: str
+    ) -> list[Software]:
+        softwares = await info.context["db"].software.find_many(
+            where={
+                "OR": [
+                    {"name": {"contains": query}},
+                    {"slug": {"contains": query}},
+                    {"aliases": {"some": {"name": {"contains": query}}}},
+                ]
+            }
+        )
+        aliases = await info.context["db"].alias.find_many(
+            where={"name": {"contains": query}}, include={"software": True}
+        )
+
+        all_softwares = {
+            software.id: software
+            for software in softwares
+            + [alias.software for alias in aliases if alias.software]
+        }
+
+        all_softwares = sorted(
+            all_softwares.values(),
+            key=lambda s: s.name,
+        )
+
+        return [Software.from_db(software) for software in all_softwares]
+
+    @strawberry.field
     async def find_version(
         self, info: Info[Context, None], slug: str, version: str | None = None
     ) -> FindVersionResult | None:
