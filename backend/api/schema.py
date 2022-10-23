@@ -21,10 +21,14 @@ class Query:
                     {"slug": {"contains": query}},
                     {"aliases": {"some": {"name": {"contains": query}}}},
                 ]
-            }
+            },
+            include={
+                "latest_version": True,
+            },
         )
         aliases = await info.context["db"].alias.find_many(
-            where={"name": {"contains": query}}, include={"software": True}
+            where={"name": {"contains": query}},
+            include={"software": {"include": {"latest_version": True}}},
         )
 
         all_softwares = {
