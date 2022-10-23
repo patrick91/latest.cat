@@ -15,7 +15,7 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9.2"
+          python-version: "3.10"
 
       - name: execute py script
         env:
@@ -24,7 +24,7 @@ jobs:
           pip install -U pip
           pip install pdm
           pdm install
-          pdm fetch
+          pdm cli fetch-versions
         working-directory: backend
 
       - name: commit files

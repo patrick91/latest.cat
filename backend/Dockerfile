@@ -1,21 +1,19 @@
-FROM python:3.9-slim AS builder
+FROM python:3.10-slim
 
+# install PDM
 RUN pip install -U pip setuptools wheel
 RUN pip install pdm
 
+# copy files
 COPY pyproject.toml pdm.lock /project/
+COPY . /project
 
 WORKDIR /project
-RUN pdm export -o requirements.txt
+RUN pdm install --prod --no-lock --no-editable
 
+EXPOSE 8080
+STOPSIGNAL SIGINT
 
-FROM tiangolo/uvicorn-gunicorn:python3.9
+RUN pdm run prisma generate
 
-ENV PYTHONPATH=/project/pkgs
-COPY --from=builder /project/requirements.txt /app
-
-RUN pip install -r requirements.txt
-
-ENV PORT "8080"
-
-COPY . /app
+CMD ["pdm", "prod-server"]
