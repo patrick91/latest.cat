@@ -36,7 +36,7 @@ dev = [
 
 [tool.pdm.scripts]
 server = "uvicorn --reload main:app"
-prod-server = "uvicorn main:app"
+prod-server = "uvicorn main:app --host 0.0.0.0 --port 8080"
 fetch = "python -m cli.fetch_versions"
 cli = "python -m cli"
 
