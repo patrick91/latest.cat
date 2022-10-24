@@ -24,6 +24,7 @@ jobs:
           pip install -U pip
           pip install pdm
           pdm install
+          pdm run prisma db push
           pdm cli fetch-versions
         working-directory: backend
 
