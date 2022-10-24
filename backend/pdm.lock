@@ -455,7 +455,7 @@ summary = "Module for decorators, wrappers and monkey patching."
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:6639796fba71f982226c958f4d9d52776f6aa1c956dc55d9faeb5ac4ba95cfea"
+content_hash = "sha256:1f36cfe5d37a319770464998dc14e38a6b2d008227ca21a25ae36726ccadd2b0"
 
 [metadata.files]
 "aiosqlite 0.17.0" = [

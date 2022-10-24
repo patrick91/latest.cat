@@ -45,4 +45,5 @@ model Version {
     latest_for  Software? @relation(name: "latest")
     software    Software  @relation(name: "software", fields: [software_id], references: [id])
     software_id Int
+    pushed_at   DateTime
 }

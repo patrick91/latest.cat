@@ -32,7 +32,7 @@ def fetch_versions():
 
     async def _fetch_versions(
         software: Software, progress: Progress
-    ) -> list[tuple[int | None, ...]]:
+    ) -> list[_fetchers.Tag]:
         padded_name = software.name.ljust(longest_name)
 
         task = progress.add_task(
@@ -48,20 +48,20 @@ def fetch_versions():
     def _save_versions(
         db: prisma.Batch,
         software: prisma.models.Software,
-        versions: list[tuple[int | None, ...]],
+        versions: list[_fetchers.Tag],
     ):
-        for version_bits in versions:
-            major, minor, patch = version_bits
+        for version in versions:
 
-            assert major is not None
-            assert minor is not None
+            assert version.major is not None
+            assert version.minor is not None
 
             db.version.create(
                 {
                     "software_id": software.id,
-                    "major": major,
-                    "minor": minor,
-                    "patch": patch,
+                    "major": version.major,
+                    "minor": version.minor,
+                    "patch": version.patch,
+                    "pushed_at": version.pushed_date,
                 }
             )
 
