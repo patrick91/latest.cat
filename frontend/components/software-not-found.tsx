@@ -1,7 +1,13 @@
 import Link from "next/link";
 
 const Icon = () => (
-  <svg width={50} height={43} fill="none" viewBox="0 0 50 43" className="inline-block mr-4">
+  <svg
+    width={50}
+    height={43}
+    fill="none"
+    viewBox="0 0 50 43"
+    className="inline-block mr-4"
+  >
     <path
       fill="#000"
       d="M10.527 10.526h2.632v2.632h-2.632zM31.58 10.526h2.632v2.632H31.58zM13.158 13.158h2.632v2.632h-2.632zM34.211 13.158h2.632v2.632h-2.632zM10.527 15.79h2.632v2.632h-2.632zM31.58 15.79h2.632v2.632H31.58zM15.79 10.526h2.632v2.632H15.79zM36.843 10.526h2.632v2.632h-2.632zM15.79 15.79h2.632v2.632H15.79zM18.421 21.053h2.632v2.632h-2.632zM36.843 34.211h2.632v2.632h-2.632zM15.79 31.579h2.632v2.632H15.79zM26.316 21.053h2.632v2.632h-2.632z"
@@ -22,8 +28,8 @@ export const SoftwareNotFound = () => (
   >
     <Icon />
     Sorry, no results, try another{" "}
-    <Link href="/">
-      <a className="text-blue hover:underline">search</a>
+    <Link href="/" className="text-blue hover:underline">
+      search
     </Link>
   </div>
 );

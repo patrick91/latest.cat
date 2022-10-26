@@ -20,9 +20,7 @@ export const Header = () => {
   return (
     <header className="max-w-7xl mx-auto px-10 py-5 flex justify-between align-middle">
       <Link href="/">
-        <a>
-          <Logo />
-        </a>
+        <Logo />
       </Link>
 
       <div className="text-2xl">🐾</div>

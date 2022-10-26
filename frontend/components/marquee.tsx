@@ -8,12 +8,12 @@ export const Marquee = () => (
       "
   >
     <ReactMarquee reverse pauseOnHover duration={40000}>
-      <div className="mr-10">• Python 3.10.7 Released</div>
-      <div className="mr-10">• Python 3.10.7 Released</div>
-      <div className="mr-10">• Python 3.10.7 Released</div>
-      <div className="mr-10">• Python 3.10.7 Released</div>
-      <div className="mr-10">• Python 3.10.7 Released</div>
-      <div className="mr-10">• Python 3.10.7 Released</div>
+      <div className="mr-10">• Python 3.11.0 Released</div>
+      <div className="mr-10">• Python 3.11.0 Released</div>
+      <div className="mr-10">• Python 3.11.0 Released</div>
+      <div className="mr-10">• Python 3.11.0 Released</div>
+      <div className="mr-10">• Python 3.11.0 Released</div>
+      <div className="mr-10">• Python 3.11.0 Released</div>
     </ReactMarquee>
   </div>
 );
