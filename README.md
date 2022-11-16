@@ -1,4 +1,4 @@
-# latest.cat
+# [latest.cat](https://latest.cat)
 
 ## Shell usage examples
 
