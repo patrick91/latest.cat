@@ -40,3 +40,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
+
+  deploy:
+    needs: [build]
+    name: deploy
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
