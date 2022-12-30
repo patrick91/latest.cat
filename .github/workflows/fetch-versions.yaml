@@ -19,7 +19,7 @@ jobs:
 
       - name: execute py script
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
         run: |
           pip install -U pip
           pip install pdm
