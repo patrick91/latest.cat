@@ -73,7 +73,10 @@ async def fetch_tags_from_github(
         while has_previous_page:
             response = await client.post(
                 "https://api.github.com/graphql",
-                headers={"Authorization": f"bearer {github_token}"},
+                headers={
+                    "Authorization": f"bearer {github_token}",
+                    "User-Agent": "latest.cat/1",
+                },
                 json={
                     "query": FETCH_TAGS_QUERY,
                     "variables": {
