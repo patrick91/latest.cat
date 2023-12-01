@@ -1,0 +1,51 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import SearchInput from "../components/SearchInput.astro";
+import Marquee from "../components/Marquee.astro";
+import AboutBox from "../components/AboutBox.astro";
+import Box from "../components/Box.astro";
+import Command from "../Command.astro";
+import Footer from "../components/Footer.astro";
+import LatestReleasesMarquee from "../components/LatestReleasesMarquee.astro";
+
+const search = Astro.url.searchParams.get("search")! || "";
+
+if (search) {
+  return Astro.redirect(`/${search}`);
+}
+---
+
+<Layout title="Welcome to Astro.">
+  <Hero>
+    <div class="max-w-2xl mx-auto w-11/12">
+      <form method="get" action=".">
+        <SearchInput />
+      </form>
+    </div>
+  </Hero>
+
+  <LatestReleasesMarquee />
+
+  <div class="dark:bg-dark dark:text-white">
+    <div class="max-w-7xl mx-auto pt-10 w-11/12">
+      <AboutBox />
+      <Box title="Did you know?" class="bg-mint">
+        <p class="mb-4 font-bold">
+          You can also use latest.cat from the command line:
+        </p>
+        <Command text="curl -Lfs latest.cat/python" />
+        <div>
+          <p class="mb-4 font-bold">
+            And you can even filter the results by version number:
+          </p>
+          <Command text="curl -Lfs latest.cat/python/3.6" />
+        </div>
+      </Box>
+
+      <div class="mt-10">
+        <Footer />
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,58 @@
+---
+// const softwareName =
+//   typeof window !== "undefined" ? window.location.pathname.split("/")[1] : "";
+
+import AboutBox from "../components/AboutBox.astro";
+import Footer from "../components/Footer.astro";
+import Hero from "../components/Hero.astro";
+import LatestReleasesMarquee from "../components/LatestReleasesMarquee.astro";
+import SoftwareNotFound from "../components/SoftwareNotFound.astro";
+import Layout from "../layouts/Layout.astro";
+
+const softwareName = "test";
+
+const text = `Hey @patrick91! I think "${softwareName}" is missing from https://latest.cat, can you please add it?`;
+
+const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+  text
+)}`;
+---
+
+<Layout title="Welcome to Astro.">
+  <Hero>
+    <div class="max-w-7xl mx-auto w-10/12 flex justify-center">
+      <SoftwareNotFound />
+    </div>
+
+    <div class="max-w-6xl mx-auto flex justify-center mt-8">
+      {
+        typeof window !== "undefined" && (
+          <p class="mb-4 text-xl">
+            Do you think this is a mistake? Send us a{" "}
+            <a
+              target="_blank"
+              rel="noreferrer noopener"
+              href={tweetLink}
+              class="font-bold underline"
+            >
+              tweet
+            </a>{" "}
+            and we&apos;ll try to fix it as soon as possible!
+          </p>
+        )
+      }
+    </div>
+  </Hero>
+
+  <LatestReleasesMarquee />
+
+  <div class="dark:bg-dark dark:text-white">
+    <div class="max-w-7xl mx-auto pt-10 w-11/12">
+      <AboutBox />
+
+      <div class="mt-10">
+        <Footer />
+      </div>
+    </div>
+  </div>
+</Layout>

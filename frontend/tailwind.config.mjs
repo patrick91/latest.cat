@@ -1,0 +1,33 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+	darkMode: "class",
+	theme: {
+		fontFamily: {
+			sans: "Neue Montreal, sans-serif",
+			heading: "PP Woodland, serif",
+		},
+		extend: {
+			colors: {
+				dark: "#121212",
+				green: "#B0FFB8",
+				"spring-bud": "#a6fd00",
+				pink: "#FFE6E6",
+				cosmos: "#ffcdcd",
+				gold: "#ffd200",
+				yellow: "#F9EF05",
+				corn: "#ffee87",
+				mint: "#f8ffc2",
+				blue: "#426af8",
+				turquoise: "#00fee2",
+				"dark-purple": "#341247",
+				"gray": "#d5d5d5",
+				"dark-gray": "#2A2929",
+			},
+			boxShadow: {
+				"drop-sm": "-1px 1px 0px #000000",
+				drop: "-3px 6px 0px #000000",
+			},
+		},
+	},
+}

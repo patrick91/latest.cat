@@ -1,0 +1,119 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Bold.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-BoldItalic.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-BoldItalic.woff") format("woff");
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Italic.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Italic.woff") format("woff");
+    font-weight: normal;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Light.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Light.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-LightItalic.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-LightItalic.woff") format("woff");
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Regular.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Bold.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Heavy.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Heavy.woff") format("woff");
+    font-weight: 900;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Regular.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Ultralight.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Ultralight.woff") format("woff");
+    font-weight: 200;
+    font-style: normal;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>

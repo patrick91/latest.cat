@@ -1,0 +1,38 @@
+---
+interface Props {
+  software: string;
+  version: string;
+  requestedVersion?: string;
+}
+
+const { software, version, requestedVersion } = Astro.props;
+---
+
+<div
+  class:list={[
+    "border",
+    "text-4xl",
+    "font-heading",
+    "font-black",
+    "bg-mint",
+    "border-black",
+    "rounded-3xl",
+    "md:rounded-full",
+    "shadow-drop",
+    "px-12",
+    "py-8",
+    "text-center",
+    "inline-block",
+    "text-black",
+    "mb-10",
+  ]}
+>
+  latest version for
+  <span class="text-blue">
+    {software}{requestedVersion ? `@${requestedVersion}` : ""}
+  </span>
+   is
+  <span class="text-blue" data-version={version}>
+    {version}
+  </span>
+</div>
