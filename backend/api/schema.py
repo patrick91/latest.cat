@@ -1,11 +1,21 @@
 from collections import defaultdict
 
 import strawberry
+from datetime import datetime
 from prisma.types import VersionWhereInput
 from strawberry.types.info import Info
 
 from .context import Context
 from .types import FindVersionResult, Software, SoftwareWithMajorVersions
+
+
+# TODO: this is bad, but I want to implement this quickly :)
+@strawberry.type
+class Release:
+    version: str
+    software_name: str
+    software_slug: str
+    pushed_at: datetime
 
 
 @strawberry.type
@@ -131,6 +141,54 @@ class Query:
                 major_versions=major_versions_by_software[software.id],
             )
             for software in softwares
+        ]
+
+    @strawberry.field
+    async def latest_releases(self, info: Info[Context, None]) -> list[Release]:
+        database = info.context["db"]
+
+        data = await database.query_raw(
+            """
+            WITH RankedVersions AS (
+                SELECT
+                    v."id",
+                    v."major",
+                    v."minor",
+                    v."patch",
+                    v."build",
+                    v."software_id",
+                    v."pushed_at",
+                    ROW_NUMBER() OVER (PARTITION BY v."software_id" ORDER BY v."pushed_at" DESC) as rn
+                FROM "Version" v
+            )
+            SELECT
+                rv."id",
+                rv."major",
+                rv."minor",
+                rv."patch",
+                rv."build",
+                rv."software_id",
+                s."name" AS software_name,
+                s."slug" AS software_slug,
+                rv."pushed_at"
+            FROM RankedVersions rv
+            JOIN "Software" s ON rv."software_id" = s."id"
+            WHERE rv.rn = 1
+            ORDER BY rv."pushed_at" DESC
+            LIMIT 10;
+            """
+        )
+
+        print(data)
+
+        return [
+            Release(
+                version=f"{version['major']}.{version['minor']}.{version['patch']}",
+                software_name=version["software_name"],
+                software_slug=version["software_slug"],
+                pushed_at=datetime.fromisoformat(version["pushed_at"]),
+            )
+            for version in data
         ]
 
 
