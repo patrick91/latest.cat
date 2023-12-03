@@ -18,14 +18,32 @@ const { text } = Astro.props;
 
 <script>
   const buttons = document.querySelectorAll(".copy-command");
+  const id = "meow-audio";
 
   buttons.forEach((button) => {
+    button.addEventListener("mouseenter", function () {
+      if (!document.getElementById(id)) {
+        var audio = document.createElement("audio");
+        audio.id = id;
+        audio.src = "meow.wav";
+        audio.preload = "auto";
+        audio.volume = 0.2;
+        document.body.appendChild(audio);
+      }
+    });
+
     button.addEventListener("click", () => {
       if (button.previousElementSibling) {
         const code = button.previousElementSibling.querySelector("code");
 
         if (code) {
           navigator.clipboard.writeText(code.innerText);
+
+          var audio = document.getElementById(id);
+
+          if (audio) {
+            audio.play();
+          }
         }
       }
     });
