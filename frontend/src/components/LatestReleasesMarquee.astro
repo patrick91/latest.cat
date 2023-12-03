@@ -1,0 +1,36 @@
+---
+import Marquee from "./Marquee.astro";
+
+const operation = `query {
+  latestReleases {
+    version
+    softwareName
+    softwareSlug
+    pushedAt
+  }
+}`;
+
+const url = "https://latest-cat.fly.dev/graphql";
+
+const response = await fetch(url, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ query: operation }),
+}).then((res) => res.json());
+
+const releases = response.data.latestReleases.map(
+  (release: {
+    version: string;
+    softwareName: string;
+    softwareSlug: string;
+    pushedAt: string;
+  }) => ({
+    name: `${release.softwareName} ${release.version}`,
+    url: `/${release.softwareSlug}`,
+  })
+);
+---
+
+<Marquee releases={releases} />

@@ -1,0 +1,67 @@
+---
+interface Props {
+  releases: {
+    name: string;
+    url: string;
+  }[];
+}
+
+const { releases: originalreleases } = Astro.props;
+
+const loop = <T,>(items: T[], min: number = 10) => {
+  let newItems = [...items];
+
+  while (newItems.length < min) {
+    newItems = newItems.concat(items);
+  }
+
+  return newItems;
+};
+
+const releases = loop(originalreleases);
+---
+
+<div
+  class="marquee bg-yellow uppercase dark:bg-dark-purple dark:text-white font-heading
+    text-2xl overflow-hidden"
+>
+  <div class="inner flex w-fit py-6">
+    {
+      releases.map((release) => (
+        <div class="mr-10 flex-shrink-0">
+          <a class="hover:underline" href={release.url}>
+            &#8226; {release.name} Released
+          </a>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    --offset: 20vw;
+    --move-initial: calc(-25% + var(--offset));
+    --move-final: calc(-50% + var(--offset));
+  }
+
+  .inner {
+    transform: translate3d(var(--move-initial), 0, 0);
+    animation: marquee 30s linear infinite;
+    animation-play-state: running;
+  }
+
+  .inner:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translate3d(var(--move-initial), 0, 0);
+    }
+
+    100% {
+      transform: translate3d(var(--move-final), 0, 0);
+    }
+  }
+</style>

@@ -1,0 +1,150 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title } = Astro.props;
+let description =
+  Astro.props.description ||
+  "With latest.cat you can quickly find the latest version of your favorite software.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <script
+      defer
+      data-domain="latest.cat"
+      data-api="/plausible/api/event"
+      src="/plausible/js/script.js"></script>
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://latest.cat/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://latest.cat/social-card.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://latest.cat/" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta
+      property="twitter:image"
+      content="https://latest.cat/social-card.png"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Bold.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-BoldItalic.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-BoldItalic.woff") format("woff");
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Italic.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Italic.woff") format("woff");
+    font-weight: normal;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Light.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Light.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-LightItalic.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-LightItalic.woff") format("woff");
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "Neue Montreal";
+    src:
+      url("/fonts/NeueMontreal-Regular.woff2") format("woff2"),
+      url("/fonts/NeueMontreal-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Bold.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Heavy.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Heavy.woff") format("woff");
+    font-weight: 900;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Regular.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "PP Woodland";
+    src:
+      url("/fonts/PPWoodland-Ultralight.woff2") format("woff2"),
+      url("/fonts/PPWoodland-Ultralight.woff") format("woff");
+    font-weight: 200;
+    font-style: normal;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>

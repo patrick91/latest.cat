@@ -1,0 +1,99 @@
+---
+import AboutBox from "../components/AboutBox.astro";
+import Footer from "../components/Footer.astro";
+import Hero from "../components/Hero.astro";
+import LatestReleasesMarquee from "../components/LatestReleasesMarquee.astro";
+import LatestVersion from "../components/LatestVersion.astro";
+import Layout from "../layouts/Layout.astro";
+
+const url = "https://latest-cat.fly.dev/graphql";
+const document = `
+query FindSoftwares($query: String!, $atVersion: String, $findVersion: Boolean!) {
+  findSoftwares(query: $query) {
+    slug
+    name
+    links {
+      url
+      name
+    }
+    latestVersion {
+      asString
+    }
+  }
+  findVersion(slug: $query, version: $atVersion) @include(if: $findVersion) {
+    latestVersion
+  }
+}
+`;
+
+const [query, atVersion] = Astro.params.software!.split("@");
+
+const variables = { query, atVersion, findVersion: !!atVersion };
+
+type Software = {
+  slug: string;
+  name: string;
+  links: { url: string; name: string }[];
+  latestVersion: { asString: string };
+};
+
+const response = await fetch(url, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ query: document, variables }),
+});
+
+const { data } = await response.json();
+
+let software: Software | undefined = undefined;
+
+if (data.findSoftwares.length == 0) {
+  return Astro.redirect("/404");
+} else {
+  software = data.findSoftwares[0] as Software;
+
+  if (software.slug != query) {
+    return Astro.redirect(`/${software.slug}`);
+  }
+}
+
+let version = software!.latestVersion.asString;
+
+if (atVersion) {
+  version = data.findVersion.latestVersion;
+}
+
+const name = software!.name || "None";
+---
+
+<Layout
+  title={`${software.name}${
+    atVersion ? "@" : ""
+  }${atVersion} latest version is ${version} - latest.cat`}
+>
+  <Hero>
+    <div class="max-w-7xl mx-auto w-10/12 flex justify-center">
+      <LatestVersion
+        software={name}
+        version={version}
+        requestedVersion={atVersion}
+      />
+    </div>
+
+    <div class="max-w-6xl mx-auto flex justify-center mt-8">
+      <!-- <UsefulLinks links={software.links} /> -->
+    </div>
+  </Hero>
+
+  <LatestReleasesMarquee />
+
+  <div class="dark:bg-dark dark:text-white">
+    <div class="max-w-7xl mx-auto pt-10 w-11/12">
+      <AboutBox />
+
+      <div class="mt-10">
+        <Footer />
+      </div>
+    </div>
+  </div>
+</Layout>

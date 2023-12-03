@@ -1,0 +1,9 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<h1 class:list={["font-heading font-bold text-2xl", className]}>latest.cat</h1>
