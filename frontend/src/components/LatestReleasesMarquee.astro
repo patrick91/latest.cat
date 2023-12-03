@@ -1,20 +1,36 @@
 ---
 import Marquee from "./Marquee.astro";
+
+const operation = `query {
+  latestReleases {
+    version
+    softwareName
+    softwareSlug
+    pushedAt
+  }
+}`;
+
+const url = "https://latest-cat.fly.dev/graphql";
+
+const response = await fetch(url, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ query: operation }),
+}).then((res) => res.json());
+
+const releases = response.data.latestReleases.map(
+  (release: {
+    version: string;
+    softwareName: string;
+    softwareSlug: string;
+    pushedAt: string;
+  }) => ({
+    name: `${release.softwareName} ${release.version}`,
+    url: `/${release.softwareSlug}`,
+  })
+);
 ---
 
-<Marquee
-  releases={[
-    {
-      name: "React 18.0.0",
-      url: "https://reactjs.org/blog/2021/10/05/react-v18.0.0.html",
-    },
-    {
-      name: "Node.js 17.0.0",
-      url: "https://nodejs.org/en/blog/release/v17.0.0/",
-    },
-    {
-      name: "Rust 1.56.0",
-      url: "https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html",
-    },
-  ]}
-/>
+<Marquee releases={releases} />
