@@ -42,7 +42,7 @@ const { text } = Astro.props;
           var audio = document.getElementById(id);
 
           if (audio) {
-            audio.play();
+            (audio as HTMLAudioElement).play();
           }
         }
       }
