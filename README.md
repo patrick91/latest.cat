@@ -3,11 +3,10 @@
 ## Shell usage examples
 
 ```bash
-curl -fs latest.cat/php
+curl -Lfs latest.cat/php
 
 # you can filter versions
-curl -fs latest.cat/python/3.7
+curl -Lfs latest.cat/python@3.17
 
-pyenv install $(curl -fs latest.cat/python/3.7)
-
+pyenv install $(curl -Lfs latest.cat/python@3.11)
 ```
