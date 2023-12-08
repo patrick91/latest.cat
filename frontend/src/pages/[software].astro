@@ -69,7 +69,7 @@ const name = software!.name || "None";
 <Layout
   title={`${software.name}${
     atVersion ? "@" : ""
-  }${atVersion} latest version is ${version} - latest.cat`}
+  }${atVersion || ""} latest version is ${version} - latest.cat`}
 >
   <Hero>
     <div class="max-w-7xl mx-auto w-10/12 flex justify-center">
