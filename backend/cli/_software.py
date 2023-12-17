@@ -35,4 +35,8 @@ class Software:
         ),
         # https://github.com/golang/go/tags
         "go": re.compile(r"^go(?P<major>\d+)\.(?P<minor>\d+)(?:\.(?P<patch>\d+))?$"),
+        # https://github.com/withastro/astro/tags
+        "astro": re.compile(
+            r"^astro@?(?P<major>\d+)\.(?P<minor>\d+)(?:\.(?P<patch>\d+))?$"
+        ),
     }

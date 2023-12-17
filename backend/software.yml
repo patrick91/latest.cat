@@ -1,3 +1,15 @@
+- slug: astro
+  name: Astro
+  aliases: [🌟, ⭐]
+  source: github
+  repository: withastro/astro
+  version_naming: astro
+  links:
+    - name: docs
+      url: https://docs.astro.build/
+    - name: release notes
+      url: https://github.com/withastro/astro/releases/tag/astro%40{version}
+
 - slug: go
   name: Go
   aliases: [golang]
