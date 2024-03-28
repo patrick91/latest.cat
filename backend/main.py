@@ -25,3 +25,4 @@ graphql_app = MyGraphQL(schema, graphql_ide="apollo-sandbox")
 
 app = Starlette(on_startup=[database.connect], on_shutdown=[database.disconnect])
 app.add_route("/graphql", graphql_app)
+

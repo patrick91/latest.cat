@@ -1,9 +1,11 @@
+import os
 from collections import defaultdict
 
 import strawberry
 from datetime import datetime
 from prisma.types import VersionWhereInput
 from strawberry.types.info import Info
+from stellate_strawberry import create_stellate_extension, sync_schema_to_stellate
 
 from .context import Context
 from .types import FindVersionResult, Software, SoftwareWithMajorVersions
@@ -179,8 +181,6 @@ class Query:
             """
         )
 
-        print(data)
-
         return [
             Release(
                 version=f"{version['major']}.{version['minor']}.{version['patch']}",
@@ -192,4 +192,11 @@ class Query:
         ]
 
 
-schema = strawberry.Schema(query=Query)
+service_name = "latest-cat"
+token = os.getenv("STELLATE_TOKEN", None)
+extensions = [create_stellate_extension(service_name, token)] if token else []
+
+schema = strawberry.Schema(query=Query, extensions=extensions)
+
+if token:
+    sync_schema_to_stellate(schema, service_name, token)
