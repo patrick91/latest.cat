@@ -4,7 +4,7 @@ authors = [
   {name = "Patrick Arminio", email = "patrick.arminio@gmail.com"},
 ]
 dependencies = [
-    "strawberry-graphql<1.0.0,>=0.104.1",
+    "strawberry-graphql",
     "starlette==0.17.1",
     "uvicorn<1.0.0,>=0.17.6",
     "pydantic<2.0.0,>=1.9.0",
