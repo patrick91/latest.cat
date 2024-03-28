@@ -6,7 +6,7 @@ import LatestReleasesMarquee from "../components/LatestReleasesMarquee.astro";
 import LatestVersion from "../components/LatestVersion.astro";
 import Layout from "../layouts/Layout.astro";
 
-const url = "https://latest-cat.fly.dev/graphql";
+const url = "https://latest-cat.stellate.sh/";
 const document = `
 query FindSoftwares($query: String!, $atVersion: String, $findVersion: Boolean!) {
   findSoftwares(query: $query) {
