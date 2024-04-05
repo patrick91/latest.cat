@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:a3450acaa57bb18b1298cbf7f3e5efa92049806f2e18df0442b24597f39efc99"
+content_hash = "sha256:223684bdea7c1bb8da9478429882f7eec31861ab4de50a2d1fb1cceaa3c38e92"
 
 [[package]]
 name = "aiosqlite"
@@ -973,15 +973,13 @@ files = [
 
 [[package]]
 name = "stellate-strawberry"
-version = "0.0.3"
+version = "1.1.1"
 requires_python = "<4.0,>=3.9"
+git = "ssh://git@github.com/StellateHQ/stellate-strawberry.git"
+revision = "9a2305789b1d9cd8c3ce8326e194635bb73fffbe"
 summary = "Integrate Stellate with your Strawberry GraphQL API"
 dependencies = [
     "requests<3.0.0,>=2.31.0",
-]
-files = [
-    {file = "stellate_strawberry-0.0.3-py3-none-any.whl", hash = "sha256:3771fd12159d906a2d601bd390426dac1f896d1e97f4b583c724c022a88351e7"},
-    {file = "stellate_strawberry-0.0.3.tar.gz", hash = "sha256:503b1928eb348edbbbf4a447c2f9e023b9570846cf7f83930145cf9fd3ff6067"},
 ]
 
 [[package]]
