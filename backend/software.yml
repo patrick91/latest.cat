@@ -261,3 +261,15 @@
       url: https://reactnative.dev/docs/getting-started
     - name: Release notes
       url: https://github.com/facebook/react-native/releases/tag/v{version}
+
+- slug: trak
+  name: trak
+  aliases: [trakcli]
+  source: github
+  repository: lcfd/trak
+  version_naming: python
+  links:
+    - name: docs
+      url: https://docs.usetrak.com/
+    - name: Release notes
+      url: https://github.com/lcfd/trak/releases/tag/v{version}
