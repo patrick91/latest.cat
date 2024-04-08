@@ -92,6 +92,16 @@
     - name: Playground
       url: https://play.strawberry.rocks
 
+- slug: pdm
+  name: PDM
+  aliases: []
+  source: github
+  repository: pdm-project/pdm
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://pdm-project.org/
+
 - slug: django
   name: Django
   aliases: []
@@ -201,7 +211,7 @@
       url: https://github.com/microsoft/TypeScript/releases/tag/v{version}
     - name: Download
       url: https://www.typescriptlang.org/download
-      
+
 - slug: vue
   name: Vue.js
   aliases: [vue]
@@ -227,7 +237,7 @@
       url: https://github.com/scala/scala/releases/tag/v{version}
     - name: Download
       url: https://www.scala-lang.org/download/
-      
+
 - slug: react
   name: React
   aliases: []
