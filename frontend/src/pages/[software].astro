@@ -39,7 +39,7 @@ type Software = {
 
 const response = await fetch(url, {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json", "x-graphql-client-name": "latest.cat-astro" },
   body: JSON.stringify({ query: document, variables }),
 });
 
