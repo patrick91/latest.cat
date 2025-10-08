@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Protocol
 import strawberry
-from prisma import models
 from typing_extensions import Self
+from models import Software as SoftwareModel, Version as VersionModel, Link as LinkModel
 
 
 class VersionProtocol(Protocol):
@@ -28,7 +28,7 @@ class Link:
     name: str
 
     @classmethod
-    def from_db(cls, link: models.Link, version: models.Version | None):
+    def from_model(cls, link: LinkModel, version: VersionModel | None = None):
         url = (
             (
                 link.url.replace("{version}", version_as_string(version))
@@ -55,7 +55,7 @@ class Version:
         return version_as_string(self)
 
     @classmethod
-    def from_db(cls, version: models.Version):
+    def from_model(cls, version: VersionModel):
         return cls(
             major=version.major,
             minor=version.minor,
@@ -73,8 +73,8 @@ class Software:
     latest_version: Version | None
 
     @classmethod
-    def from_db(
-        cls, software: models.Software, version: models.Version | None = None
+    def from_model(
+        cls, software: SoftwareModel, version: VersionModel | None = None
     ) -> Self:
         latest_version = software.latest_version
 
@@ -83,11 +83,11 @@ class Software:
             name=software.name,
             slug=software.slug,
             links=(
-                [Link.from_db(link, version) for link in software.links]
+                [Link.from_model(link, version) for link in software.links]
                 if software.links
                 else []
             ),
-            latest_version=Version.from_db(latest_version) if latest_version else None,
+            latest_version=Version.from_model(latest_version) if latest_version else None,
         )
 
 

@@ -2,7 +2,6 @@ import asyncio
 import pathlib
 from typing import Awaitable, Callable, ParamSpec, TypeVar
 
-import prisma
 import typer
 import yaml  # type: ignore
 from rich.progress import (
@@ -13,6 +12,7 @@ from rich.progress import (
     TimeElapsedColumn,
 )
 
+from services.software import SoftwareService
 from . import _fetchers
 from ._software import Software
 
@@ -45,24 +45,21 @@ def fetch_versions():
 
         return versions
 
-    def _save_versions(
-        db: prisma.Batch,
-        software: prisma.models.Software,
+    async def _save_versions(
+        service: SoftwareService,
+        software_id: int,
         versions: list[_fetchers.Tag],
     ):
         for version in versions:
-
             assert version.major is not None
             assert version.minor is not None
 
-            db.version.create(
-                {
-                    "software_id": software.id,
-                    "major": version.major,
-                    "minor": version.minor,
-                    "patch": version.patch,
-                    "pushed_at": version.pushed_date,
-                }
+            await service.create_version(
+                software_id=software_id,
+                major=version.major,
+                minor=version.minor,
+                patch=version.patch,
+                pushed_at=version.pushed_date,
             )
 
     async def _fetch():
@@ -78,73 +75,43 @@ def fetch_versions():
 
         _fetch = _wrap(_fetch_versions)
 
-        async with prisma.Prisma() as db:
-            with Progress(
-                SpinnerColumn("clock"),
-                TextColumn("{task.description}  "),
-                BarColumn(),
-                TextColumn("  "),
-                TimeElapsedColumn(),
-            ) as progress:
-                tasks = [
-                    _fetch(Software(**software), progress) for software in softwares
-                ]
+        service = SoftwareService()
 
-                results = await asyncio.gather(*tasks)
+        with Progress(
+            SpinnerColumn("clock"),
+            TextColumn("{task.description}  "),
+            BarColumn(),
+            TextColumn("  "),
+            TimeElapsedColumn(),
+        ) as progress:
+            tasks = [
+                _fetch(Software(**software), progress) for software in softwares
+            ]
 
-            for software, versions in zip(softwares, results):
-                db_software = await db.software.upsert(
-                    where={"slug": software["slug"]},
-                    data={
-                        "create": {
-                            "name": software["name"],
-                            "slug": software["slug"],
-                        },
-                        "update": {},
-                    },
-                )
+            results = await asyncio.gather(*tasks)
 
-                await db.alias.delete_many(where={"software_id": db_software.id})
+        for software, versions in zip(softwares, results):
+            # Upsert software
+            software_id = await service.upsert_software(
+                name=software["name"],
+                slug=software["slug"],
+            )
 
-                for alias in software["aliases"]:
-                    await db.alias.create(
-                        data={"software_id": db_software.id, "name": alias}
-                    )
+            # Update aliases
+            await service.delete_aliases(software_id)
+            for alias in software["aliases"]:
+                await service.create_alias(software_id, alias)
 
-                await db.version.delete_many(
-                    {
-                        "software_id": db_software.id,
-                    }
-                )
+            # Update versions
+            await service.delete_versions(software_id)
+            await _save_versions(service, software_id, versions)
 
-                async with db.batch_() as batcher:
-                    _save_versions(batcher, db_software, versions)
+            # Update latest version
+            await service.update_latest_version(software_id)
 
-                latest_version = await db.version.find_first(
-                    where={"software_id": db_software.id},
-                    order=[{"major": "desc"}, {"minor": "desc"}, {"patch": "desc"}],
-                )
-
-                assert latest_version
-
-                await db.software.update(
-                    where={"id": db_software.id},
-                    data={"latest_version": {"connect": {"id": latest_version.id}}},
-                )
-
-                await db.link.delete_many(
-                    {
-                        "software_id": db_software.id,
-                    }
-                )
-                async with db.batch_() as batcher:
-                    for link in software["links"]:
-                        batcher.link.create(
-                            {
-                                "software_id": db_software.id,
-                                "name": link["name"],
-                                "url": link["url"],
-                            }
-                        )
+            # Update links
+            await service.delete_links(software_id)
+            for link in software["links"]:
+                await service.create_link(software_id, link["name"], link["url"])
 
     asyncio.run(_fetch())

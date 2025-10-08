@@ -10,9 +10,7 @@ dependencies = [
     "aiosqlite",
     "PyYAML",
     "PyGithub",
-    "prisma>=0.7.0",
     "typer",
-    "stellate-strawberry @ git+https://github.com/StellateHQ/stellate-strawberry.git",
     "fastapi[standard]",
     "httpx>=0.28.1",
     "jinja2>=3.1.6",
@@ -22,7 +20,7 @@ dependencies = [
 description = ""
 license = {text = "MIT"}
 name = "latest-cat"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 version = "0.1.0"
 
 [tool.pdm.scripts]
@@ -30,7 +28,6 @@ dev = "uvicorn --reload main:app"
 prod-server = "uvicorn main:app --host 0.0.0.0 --port 8080"
 fetch = "python -m cli.fetch_versions"
 cli = "python -m cli"
-prisma = "prisma"
 
 [tool.mypy]
 plugins = [

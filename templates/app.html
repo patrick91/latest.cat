@@ -3,7 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latest.cat</title>
+    <title>latest.cat 🐱 - check latest versions of your favorite software</title>
+    <meta name="description" content="Check the latest versions of your favorite programming languages, frameworks, and tools">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <script>
+        // Initialize dark mode before page renders to prevent flash
+        (function() {
+            const theme = (function() {
+                if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+                    return localStorage.getItem('theme');
+                }
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            })();
+
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            window.localStorage.setItem('theme', theme);
+        })();
+    </script>
     {{ vite_tags|safe }}
 </head>
 <body>

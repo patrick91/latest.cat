@@ -5,11 +5,11 @@ export default function SearchInput() {
 				<input
 					name="search"
 					placeholder="Python"
-					className="overflow-hidden bg-transparent pl-12 py-8 flex-1 outline-none focus-visible:underline dark:text-black"
+					className="overflow-hidden bg-transparent pl-12 py-8 flex-1 min-w-0 outline-none focus-visible:underline dark:text-black"
 				/>
 				<button
 					type="submit"
-					className="px-4 md:px-12 py-8 font-heading font-bold rounded-full hover:bg-gray text-black"
+					className="px-4 md:px-12 py-8 font-heading font-bold rounded-full hover:bg-gray text-black flex-shrink-0"
 				>
 					Search
 				</button>

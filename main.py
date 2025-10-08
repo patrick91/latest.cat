@@ -1,31 +1,41 @@
-from fastapi import FastAPI
+from typing import Any
+from fastapi import FastAPI, Request, Response, WebSocket
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, PlainTextResponse
+from strawberry.asgi import GraphQL
 
 from inertia import InertiaDep
 from services.software import SoftwareService
+from api.schema import schema
 
 
-# TODO: Re-enable GraphQL when we migrate to SQLModel/plain SQL
-# from typing import Any
-# from fastapi import Request, Response, WebSocket
-# from strawberry.asgi import GraphQL
-# from api.schema import schema
-#
-# class MyGraphQL(GraphQL):
-#     async def get_context(
-#         self,
-#         request: Request | WebSocket,
-#         response: Response | None = None,
-#     ) -> Any:
-#         return {"request": request, "response": response}
-#
-# graphql_app = MyGraphQL(schema, graphql_ide="apollo-sandbox")
+class MyGraphQL(GraphQL):
+    async def get_context(
+        self,
+        request: Request | WebSocket,
+        response: Response | None = None,
+    ) -> Any:
+        return {}
 
+
+graphql_app = MyGraphQL(schema, graphql_ide="apollo-sandbox")
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
-# app.add_route("/graphql", graphql_app)
+app.mount("/fonts", StaticFiles(directory="frontend/public/fonts"), name="fonts")
+
+# Serve favicon files
+import os
+from fastapi.responses import FileResponse
+
+@app.get("/favicon.{ext}")
+async def favicon(ext: str):
+    file_path = f"frontend/public/favicon.{ext}"
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    return {"error": "Not found"}
+
+app.add_route("/graphql", graphql_app)
 
 software_service = SoftwareService()
 
@@ -35,8 +45,14 @@ async def home(inertia: InertiaDep):
     return inertia.render("Home", {})
 
 
+def is_curl_request(request: Request) -> bool:
+    """Check if the request is from curl or similar CLI tool"""
+    user_agent = request.headers.get("user-agent", "").lower()
+    return any(client in user_agent for client in ["curl", "wget", "httpie", "fetch"])
+
+
 @app.get("/{software}")
-async def software_page(software: str, inertia: InertiaDep):
+async def software_page(software: str, request: Request, inertia: InertiaDep):
     # Split software name and version (e.g., "python@3.11")
     parts = software.split("@")
     query = parts[0]
@@ -47,6 +63,8 @@ async def software_page(software: str, inertia: InertiaDep):
 
     # Handle no results
     if not softwares:
+        if is_curl_request(request):
+            return PlainTextResponse("not found", status_code=404)
         return RedirectResponse(url="/404", status_code=302)
 
     software_data = softwares[0]
@@ -72,6 +90,10 @@ async def software_page(software: str, inertia: InertiaDep):
         )
         if filtered_version:
             version = filtered_version
+
+    # Return plain text for curl/CLI requests
+    if is_curl_request(request):
+        return PlainTextResponse(version)
 
     return inertia.render(
         "Software",
