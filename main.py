@@ -1,4 +1,5 @@
 from typing import Any
+import logging
 from fastapi import FastAPI, Request, Response, WebSocket
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, PlainTextResponse
@@ -7,6 +8,9 @@ from strawberry.asgi import GraphQL
 from inertia import InertiaDep
 from services.software import SoftwareService
 from api.schema import schema
+
+# Reduce watchfiles logging noise
+logging.getLogger("watchfiles.main").setLevel(logging.WARNING)
 
 
 class MyGraphQL(GraphQL):
@@ -42,7 +46,18 @@ software_service = SoftwareService()
 
 @app.get("/")
 async def home(inertia: InertiaDep):
-    return inertia.render("Home", {})
+    # Fetch latest releases for the marquee
+    releases = await software_service.get_latest_releases(limit=10)
+
+    return inertia.render("Home", {
+        "latestReleases": [
+            {
+                "name": f"{release.software_name} {release.version}",
+                "url": f"/{release.software_slug}",
+            }
+            for release in releases
+        ]
+    })
 
 
 def is_curl_request(request: Request) -> bool:
@@ -95,6 +110,9 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
     if is_curl_request(request):
         return PlainTextResponse(version)
 
+    # Fetch latest releases for the marquee
+    releases = await software_service.get_latest_releases(limit=10)
+
     return inertia.render(
         "Software",
         {
@@ -108,6 +126,13 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
             },
             "version": version,
             "requestedVersion": at_version_str,
+            "latestReleases": [
+                {
+                    "name": f"{release.software_name} {release.version}",
+                    "url": f"/{release.software_slug}",
+                }
+                for release in releases
+            ]
         },
     )
 

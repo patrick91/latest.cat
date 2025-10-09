@@ -32,18 +32,21 @@ def fetch_versions():
 
     async def _fetch_versions(
         software: Software, progress: Progress
-    ) -> list[_fetchers.Tag]:
+    ) -> list[_fetchers.Tag] | None:
         padded_name = software.name.ljust(longest_name)
 
         task = progress.add_task(
             f"Fetching versions for [bold]{padded_name}[/]", total=None
         )
 
-        versions = await _fetchers.fetch_versions(software)
-
-        progress.remove_task(task)
-
-        return versions
+        try:
+            versions = await _fetchers.fetch_versions(software)
+            progress.remove_task(task)
+            return versions
+        except Exception as e:
+            progress.remove_task(task)
+            progress.console.print(f"[red]✗ Error fetching {padded_name}: {e}[/]")
+            return None
 
     async def _save_versions(
         service: SoftwareService,
@@ -91,6 +94,10 @@ def fetch_versions():
             results = await asyncio.gather(*tasks)
 
         for software, versions in zip(softwares, results):
+            # Skip if fetching failed
+            if versions is None:
+                continue
+
             # Upsert software
             software_id = await service.upsert_software(
                 name=software["name"],

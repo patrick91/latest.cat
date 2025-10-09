@@ -327,12 +327,19 @@ class SoftwareService:
                 if row["build"]:
                     version += f"+{row['build']}"
 
+                # Handle pushed_at - could be string or datetime
+                pushed_at = row["pushed_at"]
+                if isinstance(pushed_at, str):
+                    pushed_at = datetime.fromisoformat(pushed_at)
+                elif not isinstance(pushed_at, datetime):
+                    pushed_at = datetime.now()
+
                 releases.append(
                     Release(
                         version=version,
                         software_name=row["software_name"],
                         software_slug=row["software_slug"],
-                        pushed_at=datetime.fromisoformat(row["pushed_at"]),
+                        pushed_at=pushed_at,
                     )
                 )
 

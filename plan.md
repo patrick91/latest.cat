@@ -55,7 +55,6 @@
 - [ ] Add integration tests
 
 ### 2. Performance Optimization
-- [ ] Consider connection pooling for aiosqlite
 - [ ] Batch operations where possible (e.g., bulk inserts)
 - [ ] Add database indexes if needed
 - [ ] Profile query performance

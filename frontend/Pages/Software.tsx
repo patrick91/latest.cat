@@ -12,12 +12,14 @@ interface SoftwareProps {
 	};
 	version: string;
 	requestedVersion?: string;
+	latestReleases: { name: string; url: string }[];
 }
 
 export default function Software({
 	software,
 	version,
 	requestedVersion,
+	latestReleases,
 }: SoftwareProps) {
 	return (
 		<div>
@@ -35,7 +37,7 @@ export default function Software({
 				</div>
 			</Hero>
 
-			<LatestReleasesMarquee />
+			<LatestReleasesMarquee releases={latestReleases} />
 
 			<div className="dark:bg-dark dark:text-white">
 				<div className="max-w-7xl mx-auto pt-10 w-11/12">

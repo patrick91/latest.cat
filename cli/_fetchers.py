@@ -64,6 +64,14 @@ async def fetch_tags_from_github(
 ) -> AsyncGenerator[tuple[str, datetime], None]:
     owner, name = repository.split("/")
 
+    if not github_token:
+        raise ValueError(
+            "GITHUB_TOKEN environment variable is not set. "
+            "Please create a .env file with your GitHub personal access token:\n"
+            "GITHUB_TOKEN=your_token_here\n\n"
+            "Get a token at: https://github.com/settings/tokens"
+        )
+
     async with httpx.AsyncClient() as client:
         has_previous_page = True
         before = None
@@ -71,23 +79,41 @@ async def fetch_tags_from_github(
         # TODO: optimize this in future
 
         while has_previous_page:
-            response = await client.post(
-                "https://api.github.com/graphql",
-                headers={
-                    "Authorization": f"bearer {github_token}",
-                    "User-Agent": "latest.cat/1",
-                },
-                json={
-                    "query": FETCH_TAGS_QUERY,
-                    "variables": {
-                        "owner": owner,
-                        "name": name,
-                        "before": before,
+            try:
+                response = await client.post(
+                    "https://api.github.com/graphql",
+                    headers={
+                        "Authorization": f"bearer {github_token}",
+                        "User-Agent": "latest.cat/1",
                     },
-                },
-            )
+                    json={
+                        "query": FETCH_TAGS_QUERY,
+                        "variables": {
+                            "owner": owner,
+                            "name": name,
+                            "before": before,
+                        },
+                    },
+                )
 
-            response.raise_for_status()
+                response.raise_for_status()
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 401:
+                    raise ValueError(
+                        f"GitHub API authentication failed (401 Unauthorized) for repository {repository}.\n"
+                        "Your GITHUB_TOKEN may be invalid or expired.\n"
+                        "Please check your .env file and ensure you have a valid GitHub personal access token.\n"
+                        "Get a new token at: https://github.com/settings/tokens"
+                    ) from e
+                elif e.response.status_code == 404:
+                    raise ValueError(
+                        f"Repository not found: {repository}\n"
+                        "Please check the repository name in software.yml"
+                    ) from e
+                else:
+                    raise ValueError(
+                        f"GitHub API error for {repository}: {e.response.status_code} {e.response.reason_phrase}"
+                    ) from e
             content = response.json()
 
             if errors := content.get("errors"):

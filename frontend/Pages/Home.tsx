@@ -7,7 +7,11 @@ import Box from "../components/Box";
 import Command from "../components/Command";
 import LatestReleasesMarquee from "../components/LatestReleasesMarquee";
 
-export default function Home() {
+interface HomeProps {
+	latestReleases: { name: string; url: string }[];
+}
+
+export default function Home({ latestReleases }: HomeProps) {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
@@ -27,7 +31,7 @@ export default function Home() {
 				</div>
 			</Hero>
 
-			<LatestReleasesMarquee />
+			<LatestReleasesMarquee releases={latestReleases} />
 
 			<div className="dark:bg-dark dark:text-white">
 				<div className="max-w-7xl mx-auto pt-10 w-11/12">
