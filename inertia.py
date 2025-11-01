@@ -124,7 +124,7 @@ class InertiaResponse:
         else:
             # Production mode - use built assets from manifest
             manifest = self.get_manifest()
-            entry = manifest.get('frontend/app.jsx', {})
+            entry = manifest.get('frontend/app.tsx', {})
 
             if not entry:
                 logger.error("No entry found for 'frontend/app.jsx' in manifest - did you run 'npm run build'?")

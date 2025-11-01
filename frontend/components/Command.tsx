@@ -10,7 +10,7 @@ export default function Command({ text }: CommandProps) {
 	useEffect(() => {
 		// Preload audio on component mount
 		if (!audioRef.current) {
-			const audio = new Audio("/meow.wav");
+			const audio = new Audio("/static/build/meow.wav");
 			audio.preload = "auto";
 			audio.volume = 0.2;
 			audioRef.current = audio;

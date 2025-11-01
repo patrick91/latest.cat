@@ -25,7 +25,7 @@ const { text } = Astro.props;
       if (!document.getElementById(id)) {
         var audio = document.createElement("audio");
         audio.id = id;
-        audio.src = "meow.wav";
+        audio.src = "/static/build/meow.wav";
         audio.preload = "auto";
         audio.volume = 0.2;
         document.body.appendChild(audio);

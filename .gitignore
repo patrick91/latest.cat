@@ -134,3 +134,5 @@ dmypy.json
 frontend/storybook-static
 
 node_modules/
+
+opencodetmp/

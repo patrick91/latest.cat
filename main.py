@@ -80,7 +80,18 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
     if not softwares:
         if is_curl_request(request):
             return PlainTextResponse("not found", status_code=404)
-        return RedirectResponse(url="/404", status_code=302)
+        # Render NotFound page instead of redirecting
+        releases = await software_service.get_latest_releases(limit=10)
+        return inertia.render("NotFound", {
+            "softwareName": query,
+            "latestReleases": [
+                {
+                    "name": f"{release.software_name} {release.version}",
+                    "url": f"/{release.software_slug}",
+                }
+                for release in releases
+            ]
+        })
 
     software_data = softwares[0]
 

@@ -186,6 +186,18 @@
     - name: Download
       url: https://elixir-lang.org/install.html
 
+- slug: fastapi
+  name: FastAPI
+  aliases: []
+  source: github
+  repository: fastapi/fastapi
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://fastapi.tiangolo.com/
+    - name: Release notes
+      url: https://github.com/fastapi/fastapi/releases/tag/{version}
+
 - slug: nextjs
   name: Next.js
   aliases: [next]
