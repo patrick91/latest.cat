@@ -1,123 +1,125 @@
 @import "tailwindcss";
 
 @theme {
-  --color-dark: #121212;
-  --color-green: #b0ffb8;
-  --color-spring-bud: #a6fd00;
-  --color-pink: #ffe6e6;
-  --color-cosmos: #ffcdcd;
-  --color-gold: #ffd200;
-  --color-yellow: #f9ef05;
-  --color-corn: #ffee87;
-  --color-mint: #f8ffc2;
-  --color-blue: #426af8;
-  --color-turquoise: #00fee2;
-  --color-dark-purple: #341247;
-  --color-gray: #d5d5d5;
-  --color-dark-gray: #2a2929;
+	--color-dark: #121212;
+	--color-green: #b0ffb8;
+	--color-spring-bud: #a6fd00;
+	--color-pink: #ffe6e6;
+	--color-cosmos: #ffcdcd;
+	--color-gold: #ffd200;
+	--color-yellow: #f9ef05;
+	--color-corn: #ffee87;
+	--color-mint: #f8ffc2;
+	--color-blue: #426af8;
+	--color-turquoise: #00fee2;
+	--color-dark-purple: #341247;
+	--color-gray: #d5d5d5;
+	--color-dark-gray: #2a2929;
 
-  --font-sans: "Neue Montreal", sans-serif;
-  --font-heading: "PP Woodland", serif;
+	--font-sans: "Neue Montreal", sans-serif;
+	--font-heading: "PP Woodland", serif;
 
-  --shadow-drop-sm: -1px 1px 0px #000000;
-  --shadow-drop: -3px 6px 0px #000000;
+	--shadow-drop-sm: -1px 1px 0px #000000;
+	--shadow-drop: -3px 6px 0px #000000;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+@font-face {
+	font-family: "Neue Montreal";
+	src:
+		url("/fonts/NeueMontreal-Bold.woff2") format("woff2"),
+		url("/fonts/NeueMontreal-Bold.woff") format("woff");
+	font-weight: bold;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: "Neue Montreal";
-  src:
-    url("/fonts/NeueMontreal-Bold.woff2") format("woff2"),
-    url("/fonts/NeueMontreal-Bold.woff") format("woff");
-  font-weight: bold;
-  font-style: normal;
+	font-family: "Neue Montreal";
+	src:
+		url("/fonts/NeueMontreal-BoldItalic.woff2") format("woff2"),
+		url("/fonts/NeueMontreal-BoldItalic.woff") format("woff");
+	font-weight: bold;
+	font-style: italic;
 }
 
 @font-face {
-  font-family: "Neue Montreal";
-  src:
-    url("/fonts/NeueMontreal-BoldItalic.woff2") format("woff2"),
-    url("/fonts/NeueMontreal-BoldItalic.woff") format("woff");
-  font-weight: bold;
-  font-style: italic;
+	font-family: "Neue Montreal";
+	src:
+		url("/fonts/NeueMontreal-Italic.woff2") format("woff2"),
+		url("/fonts/NeueMontreal-Italic.woff") format("woff");
+	font-weight: normal;
+	font-style: italic;
 }
 
 @font-face {
-  font-family: "Neue Montreal";
-  src:
-    url("/fonts/NeueMontreal-Italic.woff2") format("woff2"),
-    url("/fonts/NeueMontreal-Italic.woff") format("woff");
-  font-weight: normal;
-  font-style: italic;
+	font-family: "Neue Montreal";
+	src:
+		url("/fonts/NeueMontreal-Light.woff2") format("woff2"),
+		url("/fonts/NeueMontreal-Light.woff") format("woff");
+	font-weight: 300;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: "Neue Montreal";
-  src:
-    url("/fonts/NeueMontreal-Light.woff2") format("woff2"),
-    url("/fonts/NeueMontreal-Light.woff") format("woff");
-  font-weight: 300;
-  font-style: normal;
+	font-family: "Neue Montreal";
+	src:
+		url("/fonts/NeueMontreal-LightItalic.woff2") format("woff2"),
+		url("/fonts/NeueMontreal-LightItalic.woff") format("woff");
+	font-weight: 300;
+	font-style: italic;
 }
 
 @font-face {
-  font-family: "Neue Montreal";
-  src:
-    url("/fonts/NeueMontreal-LightItalic.woff2") format("woff2"),
-    url("/fonts/NeueMontreal-LightItalic.woff") format("woff");
-  font-weight: 300;
-  font-style: italic;
+	font-family: "Neue Montreal";
+	src:
+		url("/fonts/NeueMontreal-Regular.woff2") format("woff2"),
+		url("/fonts/NeueMontreal-Regular.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: "Neue Montreal";
-  src:
-    url("/fonts/NeueMontreal-Regular.woff2") format("woff2"),
-    url("/fonts/NeueMontreal-Regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
+	font-family: "PP Woodland";
+	src:
+		url("/fonts/PPWoodland-Bold.woff2") format("woff2"),
+		url("/fonts/PPWoodland-Bold.woff") format("woff");
+	font-weight: bold;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: "PP Woodland";
-  src:
-    url("/fonts/PPWoodland-Bold.woff2") format("woff2"),
-    url("/fonts/PPWoodland-Bold.woff") format("woff");
-  font-weight: bold;
-  font-style: normal;
+	font-family: "PP Woodland";
+	src:
+		url("/fonts/PPWoodland-Heavy.woff2") format("woff2"),
+		url("/fonts/PPWoodland-Heavy.woff") format("woff");
+	font-weight: 900;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: "PP Woodland";
-  src:
-    url("/fonts/PPWoodland-Heavy.woff2") format("woff2"),
-    url("/fonts/PPWoodland-Heavy.woff") format("woff");
-  font-weight: 900;
-  font-style: normal;
+	font-family: "PP Woodland";
+	src:
+		url("/fonts/PPWoodland-Regular.woff2") format("woff2"),
+		url("/fonts/PPWoodland-Regular.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: "PP Woodland";
-  src:
-    url("/fonts/PPWoodland-Regular.woff2") format("woff2"),
-    url("/fonts/PPWoodland-Regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "PP Woodland";
-  src:
-    url("/fonts/PPWoodland-Ultralight.woff2") format("woff2"),
-    url("/fonts/PPWoodland-Ultralight.woff") format("woff");
-  font-weight: 200;
-  font-style: normal;
+	font-family: "PP Woodland";
+	src:
+		url("/fonts/PPWoodland-Ultralight.woff2") format("woff2"),
+		url("/fonts/PPWoodland-Ultralight.woff") format("woff");
+	font-weight: 200;
+	font-style: normal;
 }
 
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 :where(.dark) body {
-  background-color: var(--color-dark);
+	background-color: var(--color-dark);
 }

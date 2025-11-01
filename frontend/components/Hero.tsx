@@ -21,7 +21,6 @@ export default function Hero({ children }: { children?: React.ReactNode }) {
 						Find the latest version of your favourite software
 					</p>
 				</div>
-
 				{children}
 			</div>
 
