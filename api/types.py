@@ -1,8 +1,11 @@
 from datetime import datetime
-from typing import Protocol
+from typing import Protocol, Self
+
 import strawberry
-from typing_extensions import Self
-from models import Software as SoftwareModel, Version as VersionModel, Link as LinkModel
+
+from models import Link as LinkModel
+from models import Software as SoftwareModel
+from models import Version as VersionModel
 
 
 class VersionProtocol(Protocol):
@@ -87,7 +90,9 @@ class Software:
                 if software.links
                 else []
             ),
-            latest_version=Version.from_model(latest_version) if latest_version else None,
+            latest_version=Version.from_model(latest_version)
+            if latest_version
+            else None,
         )
 
 

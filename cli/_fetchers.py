@@ -1,6 +1,6 @@
+from collections.abc import AsyncGenerator
 from dataclasses import dataclass
 from datetime import datetime
-from typing import AsyncGenerator
 
 import httpx
 from dateutil.parser import parse
@@ -61,7 +61,7 @@ class Tag:
 
 async def fetch_tags_from_github(
     repository: str,
-) -> AsyncGenerator[tuple[str, datetime], None]:
+) -> AsyncGenerator[tuple[str, datetime]]:
     owner, name = repository.split("/")
 
     if not github_token:

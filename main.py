@@ -1,13 +1,15 @@
-from typing import Any
 import logging
+import os
+from typing import Any
+
 from fastapi import FastAPI, Request, Response, WebSocket
+from fastapi.responses import FileResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse, PlainTextResponse
 from strawberry.asgi import GraphQL
 
+from api.schema import schema
 from inertia import InertiaDep
 from services.software import SoftwareService
-from api.schema import schema
 
 # Reduce watchfiles logging noise
 logging.getLogger("watchfiles.main").setLevel(logging.WARNING)
@@ -29,8 +31,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/fonts", StaticFiles(directory="frontend/public/fonts"), name="fonts")
 
 # Serve favicon files
-import os
-from fastapi.responses import FileResponse
+
 
 @app.get("/favicon.{ext}")
 async def favicon(ext: str):
@@ -38,6 +39,7 @@ async def favicon(ext: str):
     if os.path.exists(file_path):
         return FileResponse(file_path)
     return {"error": "Not found"}
+
 
 app.add_route("/graphql", graphql_app)
 
@@ -49,15 +51,18 @@ async def home(inertia: InertiaDep):
     # Fetch latest releases for the marquee
     releases = await software_service.get_latest_releases(limit=10)
 
-    return inertia.render("Home", {
-        "latestReleases": [
-            {
-                "name": f"{release.software_name} {release.version}",
-                "url": f"/{release.software_slug}",
-            }
-            for release in releases
-        ]
-    })
+    return inertia.render(
+        "Home",
+        {
+            "latestReleases": [
+                {
+                    "name": f"{release.software_name} {release.version}",
+                    "url": f"/{release.software_slug}",
+                }
+                for release in releases
+            ]
+        },
+    )
 
 
 def is_curl_request(request: Request) -> bool:
@@ -82,16 +87,19 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
             return PlainTextResponse("not found", status_code=404)
         # Render NotFound page instead of redirecting
         releases = await software_service.get_latest_releases(limit=10)
-        return inertia.render("NotFound", {
-            "softwareName": query,
-            "latestReleases": [
-                {
-                    "name": f"{release.software_name} {release.version}",
-                    "url": f"/{release.software_slug}",
-                }
-                for release in releases
-            ]
-        })
+        return inertia.render(
+            "NotFound",
+            {
+                "softwareName": query,
+                "latestReleases": [
+                    {
+                        "name": f"{release.software_name} {release.version}",
+                        "url": f"/{release.software_slug}",
+                    }
+                    for release in releases
+                ],
+            },
+        )
 
     software_data = softwares[0]
 
@@ -103,7 +111,11 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
         return RedirectResponse(url=redirect_url, status_code=302)
 
     # Get version
-    version = software_data.latest_version.as_string if software_data.latest_version else "unknown"
+    version = (
+        software_data.latest_version.as_string
+        if software_data.latest_version
+        else "unknown"
+    )
 
     # Handle version filtering (e.g., python@3.11)
     if at_version_str:
@@ -131,8 +143,7 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
                 "name": software_data.name,
                 "slug": software_data.slug,
                 "links": [
-                    {"url": link.url, "name": link.name}
-                    for link in software_data.links
+                    {"url": link.url, "name": link.name} for link in software_data.links
                 ],
             },
             "version": version,
@@ -143,7 +154,6 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
                     "url": f"/{release.software_slug}",
                 }
                 for release in releases
-            ]
+            ],
         },
     )
-

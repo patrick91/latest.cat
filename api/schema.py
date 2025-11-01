@@ -1,8 +1,10 @@
-import strawberry
 from datetime import datetime
+
+import strawberry
 from strawberry.types.info import Info
 
 from services.software import SoftwareService
+
 from .context import Context
 from .types import FindVersionResult, Software, SoftwareWithMajorVersions
 
@@ -41,9 +43,7 @@ class Query:
             major, *rest = version.split(".")
             minor = int(rest[0]) if rest else None
 
-            latest_version_str = await service.find_version(
-                slug, int(major), minor
-            )
+            latest_version_str = await service.find_version(slug, int(major), minor)
         else:
             if software.latest_version:
                 latest_version_str = software.latest_version.as_string

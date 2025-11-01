@@ -1,12 +1,17 @@
-import aiosqlite
 from datetime import datetime
-from models import Software, Version, Link
+
+import aiosqlite
 from sql_tstring import sql
+
+from models import Link, Software, Version
 
 
 class Release:
     """Release information for latest releases query"""
-    def __init__(self, version: str, software_name: str, software_slug: str, pushed_at: datetime):
+
+    def __init__(
+        self, version: str, software_name: str, software_slug: str, pushed_at: datetime
+    ):
         self.version = version
         self.software_name = software_name
         self.software_slug = software_slug

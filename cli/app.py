@@ -1,6 +1,7 @@
 import asyncio
 import pathlib
-from typing import Awaitable, Callable, ParamSpec, TypeVar
+from collections.abc import Awaitable, Callable
+from typing import ParamSpec, TypeVar
 
 import typer
 import yaml  # type: ignore
@@ -13,6 +14,7 @@ from rich.progress import (
 )
 
 from services.software import SoftwareService
+
 from . import _fetchers
 from ._software import Software
 
@@ -87,13 +89,11 @@ def fetch_versions():
             TextColumn("  "),
             TimeElapsedColumn(),
         ) as progress:
-            tasks = [
-                _fetch(Software(**software), progress) for software in softwares
-            ]
+            tasks = [_fetch(Software(**software), progress) for software in softwares]
 
             results = await asyncio.gather(*tasks)
 
-        for software, versions in zip(softwares, results):
+        for software, versions in zip(softwares, results, strict=True):
             # Skip if fetching failed
             if versions is None:
                 continue
