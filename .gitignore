@@ -138,7 +138,6 @@ node_modules/
 # Temp/build artifacts
 opencodetmp/
 static/build/
-*.sqlite
 *.lock
 !uv.lock
 !flake.lock

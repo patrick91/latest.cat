@@ -16,6 +16,7 @@ dependencies = [
     "jinja2>=3.1.6",
     "sql-tstring>=0.3.0",
     "pydantic>=2.12.0",
+    "cross-inertia>=0.3.0",
 ]
 description = ""
 license = {text = "MIT"}
@@ -28,6 +29,8 @@ dev = "uvicorn --reload main:app"
 prod-server = "uvicorn main:app --host 0.0.0.0 --port 8080"
 fetch = "python -m cli.fetch_versions"
 cli = "python -m cli"
+test = "pytest tests/"
+test-cov = "pytest tests/ --cov=inertia --cov-report=html --cov-report=term"
 
 [tool.mypy]
 plugins = [
@@ -55,13 +58,23 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["api", "cli", "services"]
+known-first-party = ["api", "cli", "services", "inertia"]
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
 [dependency-groups]
 dev = [
     "ruff>=0.14.3",
+]
+test = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
 ]

@@ -12,6 +12,8 @@ interface HomeProps {
 }
 
 export default function Home({ latestReleases }: HomeProps) {
+	console.log("Home component props:", { latestReleases });
+	
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);

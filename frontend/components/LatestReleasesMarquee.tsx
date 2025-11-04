@@ -7,7 +7,7 @@ interface LatestReleasesMarqueeProps {
 export default function LatestReleasesMarquee({
 	releases,
 }: LatestReleasesMarqueeProps) {
-	if (releases.length === 0) {
+	if (!releases || releases.length === 0) {
 		return null;
 	}
 

@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from strawberry.asgi import GraphQL
 
 from api.schema import schema
-from inertia import InertiaDep
+from inertia.fastapi import InertiaDep
 from services.software import SoftwareService
 
 # Reduce watchfiles logging noise

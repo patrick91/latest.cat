@@ -30,7 +30,7 @@
             window.localStorage.setItem('theme', theme);
         })();
     </script>
-    {{ vite_tags|safe }}
+    {{ vite()|safe }}
 </head>
 <body>
     <div id="app" data-page="{{ page }}"></div>
