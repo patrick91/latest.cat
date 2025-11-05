@@ -3,12 +3,18 @@ import os
 from typing import Any
 
 from fastapi import FastAPI, Request, Response, WebSocket
-from fastapi.responses import FileResponse, PlainTextResponse, RedirectResponse
+from fastapi.responses import (
+    FileResponse,
+    PlainTextResponse,
+    RedirectResponse,
+    StreamingResponse,
+)
 from fastapi.staticfiles import StaticFiles
 from strawberry.asgi import GraphQL
 
 from api.schema import schema
 from inertia.fastapi import InertiaDep
+from services.og_image import OGImageGenerator
 from services.software import SoftwareService
 
 # Reduce watchfiles logging noise
@@ -44,16 +50,21 @@ async def favicon(ext: str):
 app.add_route("/graphql", graphql_app)
 
 software_service = SoftwareService()
+og_image_generator = OGImageGenerator()
 
 
 @app.get("/")
-async def home(inertia: InertiaDep):
+async def home(request: Request, inertia: InertiaDep):
     # Fetch latest releases for the marquee
     releases = await software_service.get_latest_releases(limit=10)
 
+    # Determine base URL
+    is_local = request.url.hostname == "localhost"
+    base_url = "http://localhost:8000" if is_local else "https://latest.cat"
+
     return inertia.render(
         "Home",
-        {
+        props={
             "latestReleases": [
                 {
                     "name": f"{release.software_name} {release.version}",
@@ -61,6 +72,14 @@ async def home(inertia: InertiaDep):
                 }
                 for release in releases
             ]
+        },
+        view_data={
+            "og_meta": {
+                "title": "latest.cat 🐱 - check latest versions of your favorite software",
+                "description": "Check the latest versions of your favorite programming languages, frameworks, and tools",
+                "url": f"{base_url}/",
+                "image": f"{base_url}/static/og-home.png",
+            }
         },
     )
 
@@ -77,6 +96,10 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
     parts = software.split("@")
     query = parts[0]
     at_version_str = parts[1] if len(parts) > 1 else None
+
+    # Determine base URL
+    is_local = request.url.hostname == "localhost"
+    base_url = "http://localhost:8000" if is_local else "https://latest.cat"
 
     # Find software using our service
     softwares = await software_service.find_softwares(query)
@@ -138,7 +161,7 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
 
     return inertia.render(
         "Software",
-        {
+        props={
             "software": {
                 "name": software_data.name,
                 "slug": software_data.slug,
@@ -156,4 +179,40 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
                 for release in releases
             ],
         },
+        view_data={
+            "og_meta": {
+                "title": f"{software_data.name} {version} - latest.cat",
+                "description": f"The latest version of {software_data.name} is {version}",
+                "url": f"{base_url}{request.url.path}",
+                "image": f"{base_url}/og-image/{software_data.slug}.png",
+            }
+        },
+    )
+
+
+@app.get("/og-image/{software}.png")
+async def og_image_software(software: str):
+    """Generate OG image for software page"""
+    # Find software using our service
+    softwares = await software_service.find_softwares(software)
+
+    if not softwares:
+        # Redirect to static home image for unknown software
+        return RedirectResponse(url="/static/og-home.png")
+
+    software_data = softwares[0]
+    version = (
+        software_data.latest_version.as_string
+        if software_data.latest_version
+        else "unknown"
+    )
+
+    image_bytes = og_image_generator.generate_software_image(
+        software_name=software_data.name, version=version
+    )
+
+    return StreamingResponse(
+        iter([image_bytes]),
+        media_type="image/png",
+        headers={"Cache-Control": "public, max-age=3600"},
     )
