@@ -3,12 +3,14 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
+from services.og_meta import OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH, SITE_NAME
+
 
 class OGImageGenerator:
     """Service for generating Open Graph images using static background + text overlay"""
 
-    WIDTH = 1200
-    HEIGHT = 630
+    WIDTH = OG_IMAGE_WIDTH
+    HEIGHT = OG_IMAGE_HEIGHT
     SCALE = 2  # Render at 2x for better quality
 
     # Colors from the design system
@@ -63,8 +65,8 @@ class OGImageGenerator:
             heading_font = ImageFont.load_default()
             subheading_font = ImageFont.load_default()
 
-        # Draw "latest.cat" heading
-        heading_text = "latest.cat"
+        # Draw site name heading (without emoji since it's already in the constant)
+        heading_text = SITE_NAME
         heading_bbox = draw.textbbox((0, 0), heading_text, font=heading_font)
         heading_width = heading_bbox[2] - heading_bbox[0]
         heading_x = (width - heading_width) // 2
@@ -144,8 +146,8 @@ class OGImageGenerator:
             font=version_font,
         )
 
-        # Draw "latest.cat" at bottom
-        site_text = "latest.cat"
+        # Draw site name at bottom
+        site_text = SITE_NAME
         site_bbox = draw.textbbox((0, 0), site_text, font=site_font)
         site_width = site_bbox[2] - site_bbox[0]
         site_x = (width - site_width) // 2

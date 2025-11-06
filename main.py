@@ -15,6 +15,7 @@ from strawberry.asgi import GraphQL
 from api.schema import schema
 from inertia.fastapi import InertiaDep
 from services.og_image import OGImageGenerator
+from services.og_meta import get_home_og_meta, get_software_og_meta
 from services.software import SoftwareService
 
 # Reduce watchfiles logging noise
@@ -73,14 +74,7 @@ async def home(request: Request, inertia: InertiaDep):
                 for release in releases
             ]
         },
-        view_data={
-            "og_meta": {
-                "title": "latest.cat 🐱 - check latest versions of your favorite software",
-                "description": "Check the latest versions of your favorite programming languages, frameworks, and tools",
-                "url": f"{base_url}/",
-                "image": f"{base_url}/static/og-home.png",
-            }
-        },
+        view_data={"og_meta": get_home_og_meta(base_url)},
     )
 
 
@@ -180,12 +174,13 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
             ],
         },
         view_data={
-            "og_meta": {
-                "title": f"{software_data.name} {version} - latest.cat",
-                "description": f"The latest version of {software_data.name} is {version}",
-                "url": f"{base_url}{request.url.path}",
-                "image": f"{base_url}/og-image/{software_data.slug}.png",
-            }
+            "og_meta": get_software_og_meta(
+                base_url=base_url,
+                path=request.url.path,
+                software_name=software_data.name,
+                software_slug=software_data.slug,
+                version=version,
+            )
         },
     )
 

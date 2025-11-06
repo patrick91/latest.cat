@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 import SearchInput from "../components/SearchInput";
@@ -6,6 +6,7 @@ import AboutBox from "../components/AboutBox";
 import Box from "../components/Box";
 import Command from "../components/Command";
 import LatestReleasesMarquee from "../components/LatestReleasesMarquee";
+import { getHomeOGMeta } from "../utils/ogMeta";
 
 interface HomeProps {
 	latestReleases: { name: string; url: string }[];
@@ -13,6 +14,8 @@ interface HomeProps {
 
 export default function Home({ latestReleases }: HomeProps) {
 	console.log("Home component props:", { latestReleases });
+	
+	const ogMeta = getHomeOGMeta();
 	
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -24,6 +27,26 @@ export default function Home({ latestReleases }: HomeProps) {
 	};
 
 	return (
+		<>
+			<Head>
+				<title>{ogMeta.title}</title>
+				<meta name="description" content={ogMeta.description} />
+				
+				{/* Open Graph / Facebook */}
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content={ogMeta.url} />
+				<meta property="og:title" content={ogMeta.title} />
+				<meta property="og:description" content={ogMeta.description} />
+				<meta property="og:image" content={ogMeta.image} />
+				
+				{/* Twitter */}
+				<meta property="twitter:card" content="summary_large_image" />
+				<meta property="twitter:url" content={ogMeta.url} />
+				<meta property="twitter:title" content={ogMeta.title} />
+				<meta property="twitter:description" content={ogMeta.description} />
+				<meta property="twitter:image" content={ogMeta.image} />
+		</Head>
+		
 		<div>
 			<Hero>
 				<div className="max-w-2xl mx-auto w-11/12">
@@ -57,5 +80,6 @@ export default function Home({ latestReleases }: HomeProps) {
 				</div>
 			</div>
 		</div>
+	</>
 	);
 }
