@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feature/inertia
+  workflow_dispatch:
 
 jobs:
   benchmark:
