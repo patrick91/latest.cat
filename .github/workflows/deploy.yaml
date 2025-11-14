@@ -1,0 +1,28 @@
+name: "Deploy"
+
+on:
+  push:
+    branches:
+      - main
+      - feature/inertia
+
+jobs:
+  benchmark:
+    name: "Deploy"
+    runs-on: self-hosted
+
+    concurrency:
+      group: ${{ github.actor }}-deploy
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Deploy to production
+        run: uvx --from "fastapi[standard]" fastapi deploy
