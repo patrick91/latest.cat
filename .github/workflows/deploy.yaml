@@ -24,5 +24,19 @@ jobs:
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v7
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build frontend
+        run: pnpm run build
+
       - name: Deploy to production
         run: uvx --from "fastapi[standard]" fastapi deploy
