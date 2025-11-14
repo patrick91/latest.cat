@@ -1,0 +1,81 @@
+
+[project]
+authors = [
+  {name = "Patrick Arminio", email = "patrick.arminio@gmail.com"},
+]
+dependencies = [
+    "strawberry-graphql",
+    "databases",
+    "python-dotenv",
+    "aiosqlite",
+    "PyYAML",
+    "PyGithub",
+    "typer",
+    "fastapi[standard]",
+    "httpx>=0.28.1",
+    "jinja2>=3.1.6",
+    "sql-tstring>=0.3.0",
+    "pydantic>=2.12.0",
+    "cross-inertia>=0.4.0",
+    "pillow>=12.0.0",
+]
+description = ""
+license = {text = "MIT"}
+name = "latest-cat"
+requires-python = ">=3.14"
+version = "0.1.0"
+
+[tool.pdm.scripts]
+dev = "uvicorn --reload main:app"
+prod-server = "uvicorn main:app --host 0.0.0.0 --port 8080"
+fetch = "python -m cli.fetch_versions"
+cli = "python -m cli"
+test = "pytest tests/"
+test-cov = "pytest tests/ --cov=inertia --cov-report=html --cov-report=term"
+
+[tool.mypy]
+plugins = [
+  "strawberry.ext.mypy_plugin",
+  "pydantic.mypy",
+]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "I",   # isort
+  "UP",  # pyupgrade
+  "B",   # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "SIM", # flake8-simplify
+]
+ignore = [
+  "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["api", "cli", "services", "inertia"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.3",
+]
+test = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+]

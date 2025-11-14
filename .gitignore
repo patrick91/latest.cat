@@ -132,3 +132,12 @@ dmypy.json
 
 .DS_Store
 frontend/storybook-static
+
+node_modules/
+
+# Temp/build artifacts
+opencodetmp/
+static/build/
+*.lock
+!uv.lock
+!flake.lock
