@@ -39,4 +39,8 @@ class Software:
         "astro": re.compile(
             r"^astro@?(?P<major>\d+)\.(?P<minor>\d+)(?:\.(?P<patch>\d+))?$"
         ),
+        # https://github.com/mozilla-firefox/firefox/tags
+        "firefox": re.compile(
+            r"^FIREFOX_(?P<major>\d+)_(?P<minor>\d+)(?:_(?P<patch>\d+))?_RELEASE$"
+        ),
     }

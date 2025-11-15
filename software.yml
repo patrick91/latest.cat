@@ -198,6 +198,20 @@
     - name: Release notes
       url: https://github.com/fastapi/fastapi/releases/tag/{version}
 
+- slug: firefox
+  name: Firefox
+  aliases: []
+  source: github
+  repository: mozilla-firefox/firefox
+  version_naming: firefox
+  links:
+    - name: docs
+      url: https://firefox-source-docs.mozilla.org/
+    - name: Release notes
+      url: https://www.mozilla.org/en-US/firefox/releases/
+    - name: Download
+      url: https://www.mozilla.org/en-US/firefox/new/
+
 - slug: nextjs
   name: Next.js
   aliases: [next]
