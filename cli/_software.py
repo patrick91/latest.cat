@@ -43,4 +43,8 @@ class Software:
         "firefox": re.compile(
             r"^FIREFOX_(?P<major>\d+)_(?P<minor>\d+)(?:_(?P<patch>\d+))?_RELEASE$"
         ),
+        # https://github.com/chromium/chromium/tags
+        "chrome": re.compile(
+            r"^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)(?:\.(?P<build>\d+))?$"
+        ),
     }
