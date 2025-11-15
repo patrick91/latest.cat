@@ -420,13 +420,14 @@ class SoftwareService:
         minor: int | None,
         patch: int | None,
         pushed_at: datetime,
+        build: str | None = None,
     ) -> None:
         """Create a version for a software."""
         async with aiosqlite.connect(self.db_path) as db:
             sql_query, values = sql(
                 t"""
-                INSERT INTO Version (software_id, major, minor, patch, pushed_at)
-                VALUES ({software_id}, {major}, {minor}, {patch}, {pushed_at})
+                INSERT INTO Version (software_id, major, minor, patch, build, pushed_at)
+                VALUES ({software_id}, {major}, {minor}, {patch}, {build}, {pushed_at})
                 """
             )
             await db.execute(sql_query, values)

@@ -212,6 +212,20 @@
     - name: Download
       url: https://www.mozilla.org/en-US/firefox/new/
 
+- slug: chrome
+  name: Chrome
+  aliases: [chromium]
+  source: github
+  repository: chromium/chromium
+  version_naming: chrome
+  links:
+    - name: docs
+      url: https://developer.chrome.com/docs
+    - name: Release notes
+      url: https://chromereleases.googleblog.com/
+    - name: Download
+      url: https://www.google.com/chrome/
+
 - slug: nextjs
   name: Next.js
   aliases: [next]

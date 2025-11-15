@@ -57,6 +57,7 @@ class Tag:
     minor: int
     patch: int | None
     pushed_date: datetime
+    build: str | None = None
 
 
 async def fetch_tags_from_github(
@@ -154,6 +155,7 @@ async def fetch_versions(
             major = match.group("major")
             minor = match.group("minor")
             patch = match.group("patch")
+            build = match.groupdict().get("build")
 
             tags.append(
                 Tag(
@@ -161,6 +163,7 @@ async def fetch_versions(
                     minor=int(minor),
                     patch=int(patch) if patch is not None else None,
                     pushed_date=pushed_at,
+                    build=build if build is not None else None,
                 )
             )
 

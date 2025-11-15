@@ -65,6 +65,7 @@ def fetch_versions():
                 minor=version.minor,
                 patch=version.patch,
                 pushed_at=version.pushed_date,
+                build=version.build,
             )
 
     async def _fetch():
