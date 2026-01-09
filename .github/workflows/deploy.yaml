@@ -10,7 +10,7 @@ on:
 jobs:
   benchmark:
     name: "Deploy"
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     concurrency:
       group: ${{ github.actor }}-deploy
@@ -40,4 +40,7 @@ jobs:
         run: pnpm run build
 
       - name: Deploy to production
-        run: uvx --from "fastapi[standard]" fastapi deploy
+        run: uv run fastapi deploy
+        env:
+          FASTAPI_CLOUD_TOKEN: ${{ secrets.FASTAPI_CLOUD_TOKEN }}
+          FASTAPI_CLOUD_APP_ID: ${{ secrets.FASTAPI_CLOUD_APP_ID }}
