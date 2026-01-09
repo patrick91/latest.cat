@@ -141,3 +141,4 @@ static/build/
 *.lock
 !uv.lock
 !flake.lock
+.fastapicloud
