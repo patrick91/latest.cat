@@ -13,7 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from strawberry.asgi import GraphQL
 
 from api.schema import schema
-from inertia.fastapi import InertiaDep
+from cross_inertia.fastapi import InertiaDep
 from services.og_image import OGImageGenerator
 from services.og_meta import get_home_og_meta, get_software_og_meta
 from services.software import SoftwareService
