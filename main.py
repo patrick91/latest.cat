@@ -14,6 +14,7 @@ from strawberry.asgi import GraphQL
 
 from api.schema import schema
 from cross_inertia.fastapi import InertiaDep
+from cross_inertia.fastapi.experimental import inertia_lifespan
 from services.og_image import OGImageGenerator
 from services.og_meta import get_home_og_meta, get_software_og_meta
 from services.software import SoftwareService
@@ -33,7 +34,7 @@ class MyGraphQL(GraphQL):
 
 graphql_app = MyGraphQL(schema, graphql_ide="apollo-sandbox")
 
-app = FastAPI()
+app = FastAPI(lifespan=inertia_lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/fonts", StaticFiles(directory="frontend/public/fonts"), name="fonts")
 
