@@ -107,7 +107,7 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
         releases = await software_service.get_latest_releases(limit=10)
         return inertia.render(
             "NotFound",
-            {
+            props={
                 "softwareName": query,
                 "latestReleases": [
                     {
@@ -117,6 +117,7 @@ async def software_page(software: str, request: Request, inertia: InertiaDep):
                     for release in releases
                 ],
             },
+            view_data={"og_meta": get_home_og_meta(base_url)},
         )
 
     software_data = softwares[0]
