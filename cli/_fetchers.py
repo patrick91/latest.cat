@@ -138,15 +138,37 @@ async def fetch_tags_from_github(
                 yield tag["name"], parse(date)
 
 
+async def fetch_versions_from_npm(
+    package: str,
+) -> AsyncGenerator[tuple[str, datetime]]:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"https://registry.npmjs.org/{package}",
+            headers={"Accept": "application/json"},
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        times = data.get("time", {})
+        for version, timestamp in times.items():
+            if version in ("created", "modified"):
+                continue
+            yield version, parse(timestamp)
+
+
 async def fetch_versions(
     software: Software,
 ) -> list[Tag]:
-    # we only support github for now
-    assert software.repository
-
     tags: list[Tag] = []
 
-    async for version, pushed_at in fetch_tags_from_github(software.repository):
+    if software.source == "npm":
+        assert software.package
+        source = fetch_versions_from_npm(software.package)
+    else:
+        assert software.repository
+        source = fetch_tags_from_github(software.repository)
+
+    async for version, pushed_at in source:
         pattern = software._namings.get(software.version_naming)
 
         assert pattern

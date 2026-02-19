@@ -25,14 +25,6 @@ name = "latest-cat"
 requires-python = ">=3.14"
 version = "0.1.0"
 
-[tool.pdm.scripts]
-dev = "uvicorn --reload main:app"
-prod-server = "uvicorn main:app --host 0.0.0.0 --port 8080"
-fetch = "python -m cli.fetch_versions"
-cli = "python -m cli"
-test = "pytest tests/"
-test-cov = "pytest tests/ --cov=inertia --cov-report=html --cov-report=term"
-
 [tool.mypy]
 plugins = [
   "strawberry.ext.mypy_plugin",

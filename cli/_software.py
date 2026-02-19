@@ -17,6 +17,7 @@ class Software:
     version_naming: str
     repository: str | None
     links: list[Link]
+    package: str | None = None
 
     _namings = {
         # https://github.com/rust-lang/rust/tags

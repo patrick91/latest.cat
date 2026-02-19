@@ -313,3 +313,18 @@
       url: https://docs.usetrak.com/
     - name: Release notes
       url: https://github.com/lcfd/trak/releases/tag/v{version}
+
+- slug: claude-code
+  name: Claude Code
+  aliases: [claude]
+  source: npm
+  repository: null
+  package: "@anthropic-ai/claude-code"
+  version_naming: basic
+  links:
+    - name: docs
+      url: https://docs.anthropic.com/en/docs/claude-code/overview
+    - name: Release notes
+      url: https://github.com/anthropics/claude-code/releases/tag/{version}
+    - name: npm
+      url: https://www.npmjs.com/package/@anthropic-ai/claude-code
