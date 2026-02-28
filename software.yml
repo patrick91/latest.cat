@@ -314,6 +314,20 @@
     - name: Release notes
       url: https://github.com/lcfd/trak/releases/tag/v{version}
 
+- slug: bun
+  name: Bun
+  aliases: []
+  source: github
+  repository: oven-sh/bun
+  version_naming: bun
+  links:
+    - name: docs
+      url: https://bun.sh/docs
+    - name: Release notes
+      url: https://github.com/oven-sh/bun/releases/tag/bun-v{version}
+    - name: Download
+      url: https://bun.sh
+
 - slug: claude-code
   name: Claude Code
   aliases: [claude]

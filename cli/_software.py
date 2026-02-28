@@ -48,4 +48,8 @@ class Software:
         "chrome": re.compile(
             r"^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)(?:\.(?P<build>\d+))?$"
         ),
+        # https://github.com/oven-sh/bun/tags
+        "bun": re.compile(
+            r"^bun-v(?P<major>\d+)\.(?P<minor>\d+)(?:\.(?P<patch>\d+))?$"
+        ),
     }
