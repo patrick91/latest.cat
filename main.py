@@ -1,8 +1,12 @@
 import logging
 import os
+import secrets
+from time import time
 from typing import Any
 
-from fastapi import FastAPI, Request, Response, WebSocket
+from cross_inertia.fastapi import InertiaDep
+from cross_inertia.fastapi.experimental import inertia_lifespan
+from fastapi import FastAPI, HTTPException, Request, Response, WebSocket
 from fastapi.responses import (
     FileResponse,
     PlainTextResponse,
@@ -13,8 +17,7 @@ from fastapi.staticfiles import StaticFiles
 from strawberry.asgi import GraphQL
 
 from api.schema import schema
-from cross_inertia.fastapi import InertiaDep
-from cross_inertia.fastapi.experimental import inertia_lifespan
+from services.health import run_health_checks
 from services.og_image import OGImageGenerator
 from services.og_meta import get_home_og_meta, get_software_og_meta
 from services.software import SoftwareService
@@ -53,6 +56,22 @@ app.add_route("/graphql", graphql_app)
 
 software_service = SoftwareService()
 og_image_generator = OGImageGenerator()
+
+
+@app.get("/oh-dear-health-check-results")
+async def oh_dear_health_check_results(request: Request):
+    expected_secret = os.getenv("OH_DEAR_HEALTH_CHECK_SECRET")
+    provided_secret = request.headers.get("oh-dear-health-check-secret")
+
+    if (
+        expected_secret is None
+        or provided_secret is None
+        or not secrets.compare_digest(provided_secret, expected_secret)
+    ):
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    check_results = await run_health_checks()
+    return {"finishedAt": int(time()), "checkResults": check_results}
 
 
 @app.get("/")
