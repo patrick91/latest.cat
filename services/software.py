@@ -30,17 +30,34 @@ class SoftwareService:
         async with aiosqlite.connect(self.db_path) as db:
             db.row_factory = aiosqlite.Row
 
-            # Search in software table (name or slug) and aliases
+            # Search in software table (name or slug) and aliases. Exact matches
+            # must come first: for example, "go" is also a substring of "Django".
             search_query = f"%{query}%"
             sql_query, values = sql(
                 t"""
-                SELECT DISTINCT s.id, s.name, s.slug, s.latest_version_id
+                SELECT s.id, s.name, s.slug, s.latest_version_id
                 FROM Software s
-                LEFT JOIN Alias a ON a.software_id = s.id
-                WHERE s.name LIKE {search_query}
-                   OR s.slug LIKE {search_query}
-                   OR a.name LIKE {search_query}
-                ORDER BY s.name
+                WHERE LOWER(s.name) LIKE LOWER({search_query})
+                   OR LOWER(s.slug) LIKE LOWER({search_query})
+                   OR EXISTS (
+                       SELECT 1
+                       FROM Alias a
+                       WHERE a.software_id = s.id
+                         AND LOWER(a.name) LIKE LOWER({search_query})
+                   )
+                ORDER BY
+                    CASE
+                        WHEN LOWER(s.slug) = LOWER({query}) THEN 0
+                        WHEN LOWER(s.name) = LOWER({query}) THEN 1
+                        WHEN EXISTS (
+                            SELECT 1
+                            FROM Alias a
+                            WHERE a.software_id = s.id
+                              AND LOWER(a.name) = LOWER({query})
+                        ) THEN 2
+                        ELSE 3
+                    END,
+                    s.name
                 """
             )
             cursor = await db.execute(sql_query, values)
