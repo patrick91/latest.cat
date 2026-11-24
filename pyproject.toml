@@ -18,7 +18,6 @@ dependencies = [
     "pydantic>=2.12.0",
     "cross-inertia>=0.4.0",
     "pillow>=12.0.0",
-    "fastapi-cloud-cli==0.22.2",
 ]
 description = ""
 license = {text = "MIT"}
