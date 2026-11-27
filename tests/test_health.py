@@ -74,6 +74,7 @@ async def test_health_endpoint_returns_fresh_results_for_the_correct_secret(
     )
 
     assert first_response.status_code == 200
+    assert first_response.headers["cache-control"] == "no-store"
     assert first_response.json() == {
         "finishedAt": 1_716_383_400,
         "checkResults": check_results,
