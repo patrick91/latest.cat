@@ -59,7 +59,11 @@ og_image_generator = OGImageGenerator()
 
 
 @app.get("/oh-dear-health-check-results")
-async def oh_dear_health_check_results(request: Request):
+async def oh_dear_health_check_results(request: Request, response: Response):
+    # Laravel Cloud's edge caches 200s without Cache-Control for 2 hours, which
+    # serves stale results to Oh Dear and skips the secret check for everyone.
+    response.headers["Cache-Control"] = "no-store"
+
     expected_secret = os.getenv("OH_DEAR_HEALTH_CHECK_SECRET")
     provided_secret = request.headers.get("oh-dear-health-check-secret")
 
